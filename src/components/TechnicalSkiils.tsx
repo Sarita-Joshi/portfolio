@@ -165,8 +165,8 @@ const TechnicalSkills = () => {
         { name: "Scikit-learn", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" className=" w-4 h-4"/>
          },
-        { name: "Transformers", logo: <img src="src/assets/logos/hf.svg" className=" w-4 h-4"/> },
-        { name: "LangChain", logo: <img src="src/assets/logos/langchain.png" className=" w-5 h-5"/>},
+        { name: "Transformers", logo: <img src="/assets/logos/hf.svg" className=" w-4 h-4"/> },
+        { name: "LangChain", logo: <img src="/assets/logos/langchain.png" className=" w-5 h-5"/>},
       ],
       concepts:["LLMs", "RAG", "Prompt Tuning", "Embeddings", "Token Limit", "Fine-tuning"],
       color: "border-blue-300/30 bg-blue-300/10",
@@ -185,10 +185,10 @@ const TechnicalSkills = () => {
         { name: "Airflow", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apacheairflow/apacheairflow-original.svg" className=" w-4 h-4"/>
          },
-         { name: "Databricks", logo: <img src="src/assets/logos/databricks.png" className=" w-4 h-4"/> },
-         { name: "Blob Storage", logo: <img src="src/assets/logos/blob.png" className=" w-4 h-4"/> },
-        { name: "Synapse", logo: <img src="src/assets/logos/synapse.png" className=" w-4 h-4"/> },
-        { name: "Powerbi", logo: <img src="src/assets/logos/powerbi.png" className=" w-4 h-4"/> }
+         { name: "Databricks", logo: <img src="/assets/logos/databricks.png" className=" w-4 h-4"/> },
+         { name: "Blob Storage", logo: <img src="/assets/logos/blob.png" className=" w-4 h-4"/> },
+        { name: "Synapse", logo: <img src="/assets/logos/synapse.png" className=" w-4 h-4"/> },
+        { name: "Powerbi", logo: <img src="/assets/logos/powerbi.png" className=" w-4 h-4"/> }
       ],
       concepts:[ "ETL/ELT", "Batch vs Streaming", "Data Warehouse", "Airflow DAGs", "A/B Testing"],
       color: "border-pink-300/30 bg-pink-300/10",
@@ -211,7 +211,7 @@ const TechnicalSkills = () => {
         { name: "Azure DevOps", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuredevops/azuredevops-original.svg" className=" w-4 h-4"/>
          },
-        { name: "Grafana", logo: <img src="src/assets/logos/graphana.png" className=" w-4 h-4"/> },
+        { name: "Grafana", logo: <img src="/assets/logos/graphana.png" className=" w-4 h-4"/> },
         { name: "Kibana", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kibana/kibana-original.svg" className=" w-4 h-4"/>
          },
