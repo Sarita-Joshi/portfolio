@@ -37,18 +37,24 @@ const Footer = () => {
             <div className="flex space-x-4 mb-4">
               <a
                 href="mailto:joshisarita1311@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
               >
                 <Mail className="w-7 h-7" />
               </a>
               <a
                 href="https://linkedin.com/in/sarita-joshi"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
               >
                 <Linkedin className="w-8 h-7" />
               </a>
               <a
                 href="https://github.com/Sarita-Joshi"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
               >
                 <Github className="w-8 h-7" />

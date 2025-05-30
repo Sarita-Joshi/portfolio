@@ -1,10 +1,12 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { name: 'Home', href: '#hero' },
@@ -17,10 +19,24 @@ const Navigation = () => {
   ];
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    const sectionId = href.replace('#', '');
+
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Delay to wait for homepage to render
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // adjust if needed
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
+
     setIsOpen(false);
   };
 

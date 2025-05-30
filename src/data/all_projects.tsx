@@ -43,41 +43,7 @@ Designed a Spark Structured Streaming pipeline integrated with Kafka to detect f
 - Enabled demo handling 100K+ events/hour
     `,
   },
-  {
-    id: 2,
-    title: "Voice Prescription Generation",
-    description:
-      "Built a BERT-powered voice prescription tool with autosuggest/autocomplete, trained on SNOMED data. Improved NER accuracy to 85% and response time by 30%.",
-      date: "Aug 2022 - Dec 2022",
-      tags: ["BERT", "Python", "React.js", "Firebase", "SpaCy", "SNOMED"],
-    gradient: "from-blue-500 to-cyan-500",
-    featured: true,
-    metrics: "85% NER accuracy, 30% faster response",
-    category: ["Machine Learning", "NLP", "Full-stack"],
-    // github: "https://github.com/sarita-joshi/fraud-detection",
-    content: `
-### Overview
-Created a voice-to-text system for doctors to generate prescriptions using medical NLP.
-
-### Tech Stack
-- **BERT** fine-tuned for NER with SNOMED terms
-- **React + Firebase** for frontend and backend
-- **SpaCy** for preprocessing and autocomplete
-
-### Features
-- Voice input with real-time transcription
-- Autocomplete & autosuggest based on diagnosis
-
-### Limitations
-- Requires medical vocabulary tuning
-- Moderate latency for voice decoding
-
-### Impact
-- 85% NER accuracy
-- Reduced prescription writing time by 30%
-    `,
-  },
-  {
+    {
     id: 14,
     title: "Multi-Agent LLM Article Generator",
     description:
@@ -114,6 +80,107 @@ Developed a fully autonomous article generation system using multiple LangChain 
 ## Impact
 Enabled automated generation of explainer articles for video shorts and blogs, doubling content output speed and reducing manual effort by over 70%.
 `,
+  },
+  {
+    id: 5,
+    title: "Customer Service AI Chatbot",
+    description:
+      "Deployed an OpenAI + LangChain chatbot integrated with Salesforce to automate healthcare queries. Achieved 30% ticket resolution automation with <2% reopen rate.",
+      date: "Jan 2023 - Dec 2023",
+      tags: ["OpenAI", "LangChain", "Python", "Salesforce", "NLP"],
+    gradient: "from-indigo-500 to-blue-500",
+    featured: true,
+    metrics: "30% automation rate, <2% reopen rate",
+    category: ["Artificial Intelligence", "NLP", "Full-stack"],
+    // github: "https://github.com/sarita-joshi/fraud-detection",
+    content: `
+### Overview
+Deployed RAG-based chatbot to assist with patient queries and support tickets.
+
+### Tech Stack
+- **OpenAI + LangChain** for generative responses
+- **Salesforce** for user data and ticket syncing
+- **Azure SQL** for logging & metrics
+
+### Features
+- Ticket triage with confidence scoring
+- RAG for document-grounded answers
+
+### Limitations
+- Long prompts increased inference time
+- Some sensitive queries required escalation
+
+### Impact
+- Automated 30% tickets
+- <2% reopen rate across 2 months
+    `,
+  },
+  {
+    id: 11,
+    title: "Blockchain Scholarship Platform",
+    description:
+      "Developed a blockchain-based scholarship platform with smart contracts and MongoDB backend. Enabled role-based workflows, transparency, and application traceability.",
+      date: "Aug 2024 - Dec 2024",
+      tags: ["Solidity", "MongoDB", "React", "Node.js", "FastAPI", "Web3"],
+    gradient: "from-green-600 to-cyan-500",
+    featured: false,
+    metrics: "100+ verified applicants, 95% data accuracy",
+    category: ["Full-stack", "Blockchain"],
+    github: "https://github.com/Sarita-Joshi/Blockchain-Scholarship-Funing",
+    content: `
+### Overview
+Created a blockchain-based platform for managing scholarship applications and fund disbursements.
+
+### Tech Stack
+- **Solidity** smart contracts
+- **MongoDB + FastAPI** for metadata storage
+- **React + ShadCN** for frontend UI
+
+### Features
+- Role-based access for donors, reviewers
+- Fund transparency & decentralized logic
+
+### Limitations
+- Gas cost optimization pending
+- Limited wallet integrations
+
+### Impact
+- Enabled trustless donation-based fund flow
+    `,
+  },
+  {
+    id: 2,
+    title: "Voice Prescription Generation",
+    description:
+      "Built a BERT-powered voice prescription tool with autosuggest/autocomplete, trained on SNOMED data. Improved NER accuracy to 85% and response time by 30%.",
+      date: "Aug 2022 - Dec 2022",
+      tags: ["BERT", "Python", "React.js", "Firebase", "SpaCy", "SNOMED"],
+    gradient: "from-blue-500 to-cyan-500",
+    featured: false,
+    metrics: "85% NER accuracy, 30% faster response",
+    category: ["Machine Learning", "NLP", "Full-stack"],
+    // github: "https://github.com/sarita-joshi/fraud-detection",
+    content: `
+### Overview
+Created a voice-to-text system for doctors to generate prescriptions using medical NLP.
+
+### Tech Stack
+- **BERT** fine-tuned for NER with SNOMED terms
+- **React + Firebase** for frontend and backend
+- **SpaCy** for preprocessing and autocomplete
+
+### Features
+- Voice input with real-time transcription
+- Autocomplete & autosuggest based on diagnosis
+
+### Limitations
+- Requires medical vocabulary tuning
+- Moderate latency for voice decoding
+
+### Impact
+- 85% NER accuracy
+- Reduced prescription writing time by 30%
+    `,
   },
   {
     id: 15,
@@ -157,39 +224,7 @@ Built a real-time computer vision tool to identify and sort waste into recyclabl
 Achieved 94% classification accuracy with significant reduction in sorting time, promoting sustainability initiatives and waste management automation.
 `,
   },
-  {
-    id: 11,
-    title: "Blockchain Scholarship Platform",
-    description:
-      "Developed a blockchain-based scholarship platform with smart contracts and MongoDB backend. Enabled role-based workflows, transparency, and application traceability.",
-      date: "Aug 2024 - Dec 2024",
-      tags: ["Solidity", "MongoDB", "React", "Node.js", "FastAPI", "Web3"],
-    gradient: "from-green-600 to-cyan-500",
-    featured: true,
-    metrics: "100+ verified applicants, 95% data accuracy",
-    category: ["Full-stack", "Blockchain"],
-    github: "https://github.com/Sarita-Joshi/Blockchain-Scholarship-Funing",
-    content: `
-### Overview
-Created a blockchain-based platform for managing scholarship applications and fund disbursements.
-
-### Tech Stack
-- **Solidity** smart contracts
-- **MongoDB + FastAPI** for metadata storage
-- **React + ShadCN** for frontend UI
-
-### Features
-- Role-based access for donors, reviewers
-- Fund transparency & decentralized logic
-
-### Limitations
-- Gas cost optimization pending
-- Limited wallet integrations
-
-### Impact
-- Enabled trustless donation-based fund flow
-    `,
-  },
+  
   {
     id: 3,
     title: "High-Performance Search Engine",
@@ -198,7 +233,7 @@ Created a blockchain-based platform for managing scholarship applications and fu
       date: "Jan 2022 - Dec 2022",
       tags: ["ElasticSearch", "SQL", "NLP", "Python", "Azure"],
     gradient: "from-green-500 to-emerald-500",
-    featured: true,
+    featured: false,
     metrics: "<30ms response, 70% CTR, 98% fewer zero results",
     category: ["NLP", "Backend Engineering", "Data Engineering"],
     // github: "https://github.com/sarita-joshi/fraud-detection",
@@ -262,40 +297,6 @@ Automated validation of embedded SDS modules across MBUX versions.
 
 ### Impact
 - 33% time saved in developer testing
-    `,
-  },
-  {
-    id: 5,
-    title: "Customer Service AI Chatbot",
-    description:
-      "Deployed an OpenAI + LangChain chatbot integrated with Salesforce to automate healthcare queries. Achieved 30% ticket resolution automation with <2% reopen rate.",
-      date: "Jan 2023 - Dec 2023",
-      tags: ["OpenAI", "LangChain", "Python", "Salesforce", "NLP"],
-    gradient: "from-indigo-500 to-blue-500",
-    featured: false,
-    metrics: "30% automation rate, <2% reopen rate",
-    category: ["Artificial Intelligence", "NLP", "Full-stack"],
-    // github: "https://github.com/sarita-joshi/fraud-detection",
-    content: `
-### Overview
-Deployed RAG-based chatbot to assist with patient queries and support tickets.
-
-### Tech Stack
-- **OpenAI + LangChain** for generative responses
-- **Salesforce** for user data and ticket syncing
-- **Azure SQL** for logging & metrics
-
-### Features
-- Ticket triage with confidence scoring
-- RAG for document-grounded answers
-
-### Limitations
-- Long prompts increased inference time
-- Some sensitive queries required escalation
-
-### Impact
-- Automated 30% tickets
-- <2% reopen rate across 2 months
     `,
   },
   {
