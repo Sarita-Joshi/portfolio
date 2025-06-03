@@ -276,12 +276,7 @@ return (
         </div>
 
         <div className="overflow-hidden">
-          <motion.div
-            className="flex space-x-8"
-            initial={{ x: 100 }}
-            animate={{ x: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
+            <div className={`flex space-x-8 animate-scroll`}>
             {[...majorSkills, ...majorSkills, ...majorSkills].map((skill, index) => (
               <div
                 key={index}
@@ -296,7 +291,7 @@ return (
                 </span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>
