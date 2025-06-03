@@ -54,16 +54,8 @@ const Index = () => {
         <Experience />
         <Projects />
         <Awards />
-        <div className="text-center mb-16">
-        <h2 
-          className={`text-4xl font-bold text-white pt-8`}
-          style={{ animationDelay: '0ms' }}
-        >
-          Let's Build Something Amazing!
-        </h2>
         
-      </div>
-        <Footer />
+        <ContactSection />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Briefcase, MapPin, Calendar } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const Experience = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -63,34 +64,55 @@ const Experience = () => {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section id="experience" ref={sectionRef} className="pt-10 px-4 sm:px-6 lg:px-8 bg-gray-900">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Professional Experience
-          </h2>
-          <p className="text-xl text-gray-300">
-            Journey in data engineering, ML systems, and automotive technology
-          </p>
-        </div>
 
-        <div className="relative mb-16">
-          {/* Timeline line */}
-          <div className="hidden md:block absolute left-4 md:left-1/4 md:transform md:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-500 to-green-500"></div>
 
+return (
+  <section id="experience" ref={sectionRef} className="pt-10 px-4 sm:px-6 lg:px-8 bg-gray-900">
+    <div className="max-w-7xl mx-auto">
+      
+      {/* Section Heading */}
+      <motion.div
+        className="text-center mb-10"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Professional Experience
+        </h2>
+        <p className="text-xl text-gray-300">
+          Journey in data engineering, ML systems, and automotive technology
+        </p>
+      </motion.div>
+
+      {/* Timeline Container */}
+      <div className="relative mb-16">
+        <div className="hidden md:block absolute left-4 md:left-1/4 md:transform md:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-500 to-green-500"></div>
+
+        {/* Timeline Items */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+        >
           {experiences.map((exp, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`relative mb-12 last:mb-0 transform transition-all duration-500 ease-out ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5 }}
+              className="relative mb-12 last:mb-0"
             >
-              {/* Timeline Dot */}
+              {/* Dot */}
               <div
                 className={`hidden md:block absolute left-2 md:left-1/4 md:transform md:-translate-x-1/2 w-4 h-4 bg-gray-900 border-4 rounded-full ${
-                  exp.current ? 'border-green-400' : 'border-blue-400'
+                  exp.current ? "border-green-400" : "border-blue-400"
                 }`}
               ></div>
 
@@ -130,12 +152,14 @@ const Experience = () => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
+
 };
 
 export default Experience;

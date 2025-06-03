@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { allProjects, categories } from '@/data/all_projects';
 import { useState } from 'react';
+import { motion } from "framer-motion";
 
 const ProjectGallery = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -62,11 +63,15 @@ const ProjectGallery = () => {
           <div className="mb-16">
 
             <div className="grid md:grid-cols-3 gap-8">
-              {filteredProjects.map((project) => (
-                <div
-                  key={project.id}
-                  className="bg-gray-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-700/50"
-                >
+              {filteredProjects.map((project, index) => (
+                <motion.div
+    key={project.id}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: index * 0.05 }}
+    viewport={{ once: true }}
+    className="bg-gray-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-700/50"
+  >
                   <div className={`h-2 bg-gradient-to-r ${project.gradient}`}></div>
                   <div className="p-8">
                     <div className="flex items-center justify-between mb-4">
@@ -116,7 +121,7 @@ const ProjectGallery = () => {
                         </Link>}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

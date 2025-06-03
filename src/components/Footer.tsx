@@ -3,36 +3,27 @@ import { Github, Linkedin, Mail, Coffee } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+    <footer className="bg-gray-900 text-white py-4x-4 sm:px-6 lg:px-8">
 
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8">
           <div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent mb-4">
               Sarita Joshi
             </h2>
             <p className="text-gray-300 text-base leading-relaxed">
-            “Engineer blending AI, backend systems, and data infrastructure to turn ideas into intelligent, scalable products — from ETL and analytics to autonomous LLM agents and blockchain platforms.”
-            </p>
+            I turn complex AI and backend systems into intelligent products that speak the language of business: speed, insight, and growth.            </p>
           </div>
           
           <div>
-            <h3 className="text-xl font-semibold mb-4 text-center">Quick Links</h3>
-            <ul className="space-y-2 text-center">
-              <li><a href="#hero" className="text-gray-400 hover:text-blue-400 transition-colors duration-200">About</a></li>
-              <li><a href="#skills" className="text-gray-400 hover:text-blue-400 transition-colors duration-200">Skills</a></li>
-              <li><a href="#projects" className="text-gray-400 hover:text-blue-400 transition-colors duration-200">Projects</a></li>
-              <li><a href="#experience" className="text-gray-400 hover:text-blue-400 transition-colors duration-200">Experience</a></li>
-              <li><a href="#contact" className="text-gray-400 hover:text-blue-400 transition-colors duration-200">Contact</a></li>
-            </ul>
-          </div>
-          
-          <div>
-          <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <h3 className="text-2xl font-semibold text-white flex items-center gap-3">
               <Coffee className="text-cyan-400 w-10 h-10" />
               Get In Touch
             </h3>
+            <p className="max-w-1/2 text-gray-400 text-sm mb-6 mt-3">
+              Open to opportunities in Software Engineering with MLOps
+            </p>
             
             <div className="flex space-x-4 mb-4">
               <a
@@ -60,9 +51,7 @@ const Footer = () => {
                 <Github className="w-8 h-7" />
               </a>
             </div>
-            <p className="text-gray-300 text-md">
-              Open to opportunities in Data Engineering, ML Engineering, and Full-Stack Development
-            </p>
+            
           </div>
         </div>
         

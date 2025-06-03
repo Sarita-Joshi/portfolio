@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 const TechnicalSkills = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -165,8 +166,8 @@ const TechnicalSkills = () => {
         { name: "Scikit-learn", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" className=" w-4 h-4"/>
          },
-        { name: "Transformers", logo: <img src="/assets/logos/hf.svg" className=" w-4 h-4"/> },
-        { name: "LangChain", logo: <img src="/assets/logos/langchain.png" className=" w-5 h-5"/>},
+        { name: "Transformers", logo: <img src="./assets/logos/hf.svg" className=" w-4 h-4"/> },
+        { name: "LangChain", logo: <img src="./assets/logos/langchain.png" className=" w-5 h-5"/>},
       ],
       concepts:["LLMs", "RAG", "Prompt Tuning", "Embeddings", "Token Limit", "Fine-tuning"],
       color: "border-blue-300/30 bg-blue-300/10",
@@ -185,10 +186,10 @@ const TechnicalSkills = () => {
         { name: "Airflow", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apacheairflow/apacheairflow-original.svg" className=" w-4 h-4"/>
          },
-         { name: "Databricks", logo: <img src="/assets/logos/databricks.png" className=" w-4 h-4"/> },
-         { name: "Blob Storage", logo: <img src="/assets/logos/blob.png" className=" w-4 h-4"/> },
-        { name: "Synapse", logo: <img src="/assets/logos/synapse.png" className=" w-4 h-4"/> },
-        { name: "Powerbi", logo: <img src="/assets/logos/powerbi.png" className=" w-4 h-4"/> }
+         { name: "Databricks", logo: <img src="./assets/logos/databricks.png" className=" w-4 h-4"/> },
+         { name: "Blob Storage", logo: <img src="./assets/logos/blob.png" className=" w-4 h-4"/> },
+        { name: "Synapse", logo: <img src="./assets/logos/synapse.png" className=" w-4 h-4"/> },
+        { name: "Powerbi", logo: <img src="./assets/logos/powerbi.png" className=" w-4 h-4"/> }
       ],
       concepts:[ "ETL/ELT", "Batch vs Streaming", "Data Warehouse", "Airflow DAGs", "A/B Testing"],
       color: "border-pink-300/30 bg-pink-300/10",
@@ -211,7 +212,7 @@ const TechnicalSkills = () => {
         { name: "Azure DevOps", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuredevops/azuredevops-original.svg" className=" w-4 h-4"/>
          },
-        { name: "Grafana", logo: <img src="/assets/logos/graphana.png" className=" w-4 h-4"/> },
+        { name: "Grafana", logo: <img src="./assets/logos/graphana.png" className=" w-4 h-4"/> },
         { name: "Kibana", logo: 
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kibana/kibana-original.svg" className=" w-4 h-4"/>
          },
@@ -244,88 +245,124 @@ const TechnicalSkills = () => {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section ref={sectionRef} id="skills" className="container mx-auto px-4 py-16">
-      <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Technical Skills
-          </h2>
-          <p className="text-xl text-gray-300">
-            Expertise in data engineering, ML, and cloud technologies
-          </p>
-        </div>
-      
-      {/* Animated Skill Carousel */}
-      <div className="mb-16 overflow-hidden">
-        <div className="relative bg-gray-800/10 backdrop-blur-sm  border border-gray-700/10 py-4">
-          <div className="flex animate-pulse pl-4">
-            <div className="w-2 h-2 bg-cyan-400 rounded-full mr-2"></div>
-            <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          </div>
-          
-          <div className="overflow-hidden">
-            <div className={`flex space-x-8 animate-scroll`}>
-              {[...majorSkills, ...majorSkills, ...majorSkills].map((skill, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 flex flex-col pt-4 items-center group cursor-pointer transform transition-all duration-300 hover:scale-110"
-                >
-                  <img src={skill.logo} className="w-8 h-8 filter drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300"/>
-                  
-                  <span className="text-gray-300 text-sm font-medium group-hover:text-white transition-colors">
-                    {skill.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+return (
+  <section ref={sectionRef} id="skills" className="container mx-auto px-4 py-16">
+    <motion.div
+      className="text-center mb-16"
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Technical Skills</h2>
+      <p className="text-xl text-gray-300">
+        Expertise in data engineering, ML, and cloud technologies
+      </p>
+    </motion.div>
 
-      {/* Categorized Skill Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Object.entries(skillCategories).map(([category, { skills, color, theme, gradient, concepts }], index) => (
-          <Card 
-            key={category} 
-            className={`border-gray-700/50 bg-gray-800/80 border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-300/10 ${
-              isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ animationDelay: `${index * 150}ms` }}
+    {/* Animated Skill Carousel */}
+    <motion.div
+      className="mb-16 overflow-hidden"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    >
+      <div className="relative bg-gray-800/10 backdrop-blur-sm border border-gray-700/10 py-4">
+        <div className="flex pl-4 animate-pulse">
+          <div className="w-2 h-2 bg-cyan-400 rounded-full mr-2"></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
+          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+        </div>
+
+        <div className="overflow-hidden">
+          <motion.div
+            className="flex space-x-8"
+            initial={{ x: 100 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            <CardHeader className="pb-3">
-              <CardTitle className={`pb-3 text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r ${gradient}`}>
-                {category}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <Badge 
-                  key={skill.name} 
-                  variant="secondary" 
-                  className={`${color} text-white flex items-center gap-2 text-base hover:scale-105 transition-transform duration-200 cursor-pointer`}
-                >
-                  {skill.logo}
+            {[...majorSkills, ...majorSkills, ...majorSkills].map((skill, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 flex flex-col pt-4 items-center group cursor-pointer transform transition-all duration-300 hover:scale-110"
+              >
+                <img
+                  src={skill.logo}
+                  className="w-8 h-8 filter drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300"
+                />
+                <span className="text-gray-300 text-sm font-medium group-hover:text-white transition-colors">
                   {skill.name}
-                </Badge>
-                ))}
-                {concepts.map((concept) => (
-                  <Badge 
-                    key={concept} 
-                    variant="outline" 
-                    className={`text-xs ${theme} border border-gray-600 bg-gray-800/40 hover:scale-105 transition-transform duration-200`}
-                  >
-                    {concept}
-                  </Badge>
-                ))}
+                </span>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            ))}
+          </motion.div>
+        </div>
       </div>
-    </section>
-  );
+    </motion.div>
+
+    {/* Categorized Skill Cards */}
+    <motion.div
+      className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+      initial="hidden"
+      whileInView="visible"
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: 0.15,
+          },
+        },
+      }}
+      viewport={{ once: true }}
+    >
+      {Object.entries(skillCategories).map(
+        ([category, { skills, color, theme, gradient, concepts }], index) => (
+          <motion.div
+            key={category}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card
+              className={`border-gray-700/50 bg-gray-800/80 border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-300/10`}
+            >
+              <CardHeader className="pb-3">
+                <CardTitle className={`pb-3 text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r ${gradient}`}>
+                  {category}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill) => (
+                    <Badge
+                      key={skill.name}
+                      variant="secondary"
+                      className={`${color} text-white flex items-center gap-2 text-base hover:scale-105 transition-transform duration-200 cursor-pointer`}
+                    >
+                      {skill.logo}
+                      {skill.name}
+                    </Badge>
+                  ))}
+                  {concepts.map((concept) => (
+                    <Badge
+                      key={concept}
+                      variant="outline"
+                      className={`text-xs ${theme} border border-gray-600 bg-gray-800/40 hover:scale-105 transition-transform duration-200`}
+                    >
+                      {concept}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )
+      )}
+    </motion.div>
+  </section>
+);
 };
 
 export default TechnicalSkills;
