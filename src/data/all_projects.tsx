@@ -408,131 +408,62 @@ In a world where trust in institutions is shaky, **transparency can be engineere
     `,
   },
   {
-    id: 2,
-    title: "Voice Prescription Generation",
-    description:
-      "Built a BERT-powered voice prescription tool with autosuggest/autocomplete, trained on SNOMED data. Improved NER accuracy to 85% and response time by 30%.",
-      date: "Aug 2022 - Dec 2022",
-      tags: ["BERT", "Python", "React.js", "Firebase", "SpaCy", "SNOMED"],
-    gradient: "from-blue-500 to-cyan-500",
-    featured: false,
-    metrics: "85% NER accuracy, 30% faster response,  HIPAA-compliant",
-    category: ["MLOps & Deployment", "Full-stack"],
-    // github: "https://github.com/sarita-joshi/fraud-detection",
-    content: `
-###  Project Motivation  
-Doctors often struggle with repetitive, time-consuming prescription writing — especially in fast-paced, multilingual environments. I set out to build a **voice-enabled prescription generation system** that could understand **spoken medical commands**, even with dialectical variation, and return **structured, editable, clinically accurate prescriptions**.
+  id: 18,
+  title: "Smart Email Compose with GPT-2 and T5",
+  description:
+    "Built a Gmail-style smart compose feature using fine-tuned GPT-2 and T5 models on the Enron email dataset. Enables inline suggestions with fast completions.",
+  date: "May 2025",
+  tags: [
+    "GPT-2",
+    "T5",
+    "Transformers",
+    "FastAPI",
+    "React",
+    "Fine-tuning",
+    "NLP",
+  ],
+  gradient: "from-yellow-400 to-pink-500",
+  featured: true,
+  metrics: "Real-time suggestions with <300ms response time",
+  category: ["Generative AI", "Full-Stack"],
+  github: "https://github.com/Sarita-Joshi/Smart-Email-Compose-GPT-2-and-T5",
+  demo: "sarita-joshi.github.io/smart-Email-Compose-GPT-2-and-T5/",
+  content: `
+### Overview
+Recreated Gmail’s smart compose experience by fine-tuning two language models (GPT-2 and T5-small) on the Enron email dataset. Built a full-stack app to serve suggestions via a FastAPI backend with React frontend.
 
+### Tech Stack
+- **GPT-2**, **T5-small** via HuggingFace Transformers
+- **FastAPI** for serving completions
+- **React + TailwindCSS** for frontend
+- **Render** for deployment
 
-###  NLP Exploration: A Layered Approach  
+### Data & Preprocessing
+- Used **Enron email dataset**, extensively cleaned and parsed
+- Created **sentence pairs** by chunking email bodies and generating prefix–completion splits for training
 
-I didn’t jump straight to complex langauge models like BERT. Instead, I did benchmarking of available NLP libraries and approached, comparing:
+### Features
+- Inline autocomplete as user types (like Gmail)
+- Tab key to accept, Backspace/Escape to reject
+- Model switch (GPT-2 / T5) with UI toggle
+- Animated UI with theme toggle
+- Warning prompt if backend is down, with demo video link
 
-| Approach              | Pros                                                | Outcome             |
-|-----------------------|-----------------------------------------------------|---------------------|
-| **Stanford CoreNLP**  | Great syntactic parsing, useful for edge cases      | Slower              |
-| **Rule-based patterns**| Excellent for dosages and templates                | High precision      |
-| **BERT (fine-tuned)** |  Complex, High computation                          | Complex             |
-| **SpaCy (custom NER)**| Fast, easy to train                                 | ~85% accuracy       |
-The final pipeline ran **SpaCy + Stanford NLP** for preprocessing and NER. This saved time and maintained real-time responsiveness.
+### Limitations
+- Smaller models used due to GPU and memory constraints
+- No production-level optimization (e.g., batching, caching)
 
+### What I Learned
+- Sequence-to-sequence modeling vs decoder-only generation
+- Designing training data from real-world text
+- FastAPI deployment challenges with large models
+- UX lessons from mimicking real apps
 
-###  Smart Handling of Dialects & Drug Variants  
-
-One of the toughest challenges was understanding **hard-to-pronounce drug names** — especially when affected by local dialects or pronunciation slips (e.g., _“hydrochlorothiazide”_, _“clopidogrel”_, etc.).
-
-To solve this:
-- After transcription, I matched drug tokens against **SNOMED CT vocab** using **fuzzy matching + embeddings**
-- Returned the **top 3 most likely drug name matches** with:
-  - Suggested **dosage variants** (e.g., 250mg, 500mg, 750mg)
-  - Matching **frequencies** (e.g., once daily, twice daily)
-
-The UI then:
-- Displayed these options in an **editable dropdown**
-- Let doctors **accept, reject, or manually correct** the prediction
-- Logged rejected or overridden entries for **future retraining and fine-tuning**
-
->  This flexible flow mimicked how real doctors work — not forcing automation, but **supporting decision-making**.
-
-
-### ️ Full-Stack System Design  
-
-- **Frontend**: React.js  
-  - Live speech input via Web Speech API  
-  - Autosuggest for SNOMED terms  
-  - Editable prescription form  
-  - Patient dashboard + log view  
-
-- **Backend**: Python + Firebase  
-  - NLP model APIs (SpaCy + BERT inference)  
-  - Real-time syncing via Firestore  
-  - Secure auth via Firebase Auth  
-  - Training data log for model feedback  
-
-- **Compliance Measures:**
-  - HTTPS communication  
-  - Encrypted Firestore access with RBAC  
-  - No PII stored on local devices  
-  - Token-based auth for API access 
-
-
-###  Workflow  
-
-1. Doctor logs in via Firebase  
-2. Dictates a prescription aloud  
-3. Text is processed by NLP engine  
-4. Top 3 drug/dosage/frequency matches are shown  
-5. Doctor edits or accepts → Rx is finalized and saved  
-6. Data from rejections/overrides is stored for **continuous learning**
-
-> Example spoken input:  
-> _"Give 500 milligrams amoxicillin twice a day for sore throat."_  
-> → Output suggestions:  
-> - **Amoxicillin 250mg**
-> - **Amoxicillin 500mg**
-> - **Amoxicillin 750mg**  
-> *(Doctor selects 500mg → confirmed.)*
-
-
-###  Results
-
-| Metric                            | Result                          |
-|-----------------------------------|----------------------------------|
-| Final NER accuracy                | **85%**                          |
-| Avg. response latency             | **<900ms**                       |
-| Avg. Rx generation time saved     | **~30%**                         |
-| Prescriptions processed           | ~180 (internal testing)          |
-| Feedback entries for retraining   | 100+ (accepted/rejected cases)   |
-| HIPAA-compliant data handling     | ✅ Confirmed                     |
-
-
-###  Key Features  
-
-- Live voice-to-text transcription  
-- Medical NER for drugs, symptoms, dosages  
-- Autosuggest with top 3 editable options  
-- Manual override and real-time feedback logging  
-- Firebase-based secure login  
-- Patient logs and saved prescriptions  
-- Feedback-driven model improvement  
-
-
-###  Future Improvements  
-
-- Add **ICD-10 and RxNorm integration** for cross-system compatibility  
-- Deploy on **mobile platforms** for rural and emergency use  
-- Support **multi-accent audio training** for better transcription  
-- Build a **retraining pipeline** from feedback logs  
-- Automate **summary reports** from patient logs  
-
-
-###  Reflection  
-
-This project pushed me to **think like an engineer and a designer** — balancing real-world healthcare needs with cutting-edge NLP techniques. The **feedback-driven UI**, layered NLP stack, and retraining loop gave me hands-on experience with how **AI can enhance — not replace — expert workflows**.
-
-> Tech should adapt to the user, not the other way around — especially when lives are on the line.
-    `,
-  },
+### Impact
+- Achieved near real-time suggestions (<300ms)
+- Provided a replicable framework for anyone exploring smart compose systems
+`,
+},
   {
     id: 15,
     title: "EcoMeter: Computer Vision for Sustainable Choices",
@@ -653,7 +584,132 @@ EcoMeter was ahead of its time — built before sustainability became mainstream
 > Sustainable behavior isn't about having the data — it's about **delivering it in the moment it matters most.**
 `,
   },
-  
+  {
+    id: 2,
+    title: "Voice Prescription Generation",
+    description:
+      "Built a Spacy-powered voice prescription tool which generates structured prescription, trained on SNOMED data, from voice. Improved NER accuracy to 85% and response time by 30%.",
+      date: "Aug 2022 - Dec 2022",
+      tags: ["Python", "React.js", "Firebase", "SpaCy", "NER", "SNOMED"],
+    gradient: "from-blue-500 to-cyan-500",
+    featured: false,
+    metrics: "85% NER accuracy, 30% faster response,  HIPAA-compliant",
+    category: ["MLOps & Deployment", "Full-stack"],
+    // github: "https://github.com/sarita-joshi/fraud-detection",
+    content: `
+###  Project Motivation  
+Doctors often struggle with repetitive, time-consuming prescription writing — especially in fast-paced, multilingual environments. I set out to build a **voice-enabled prescription generation system** that could understand **spoken medical commands**, even with dialectical variation, and return **structured, editable, clinically accurate prescriptions**.
+
+
+###  NLP Exploration: A Layered Approach  
+
+I didn’t jump straight to complex langauge models like BERT. Instead, I did benchmarking of available NLP libraries and approached, comparing:
+
+| Approach              | Pros                                                | Outcome             |
+|-----------------------|-----------------------------------------------------|---------------------|
+| **Stanford CoreNLP**  | Great syntactic parsing, useful for edge cases      | Slower              |
+| **Rule-based patterns**| Excellent for dosages and templates                | High precision      |
+| **BERT (fine-tuned)** |  Complex, High computation                          | Complex             |
+| **SpaCy (custom NER)**| Fast, easy to train                                 | ~85% accuracy       |
+The final pipeline ran **SpaCy + Stanford NLP** for preprocessing and NER. This saved time and maintained real-time responsiveness.
+
+
+###  Smart Handling of Dialects & Drug Variants  
+
+One of the toughest challenges was understanding **hard-to-pronounce drug names** — especially when affected by local dialects or pronunciation slips (e.g., _“hydrochlorothiazide”_, _“clopidogrel”_, etc.).
+
+To solve this:
+- After transcription, I matched drug tokens against **SNOMED CT vocab** using **fuzzy matching + embeddings**
+- Returned the **top 3 most likely drug name matches** with:
+  - Suggested **dosage variants** (e.g., 250mg, 500mg, 750mg)
+  - Matching **frequencies** (e.g., once daily, twice daily)
+
+The UI then:
+- Displayed these options in an **editable dropdown**
+- Let doctors **accept, reject, or manually correct** the prediction
+- Logged rejected or overridden entries for **future retraining and fine-tuning**
+
+>  This flexible flow mimicked how real doctors work — not forcing automation, but **supporting decision-making**.
+
+
+### ️ Full-Stack System Design  
+
+- **Frontend**: React.js  
+  - Live speech input via Web Speech API  
+  - Autosuggest for SNOMED terms  
+  - Editable prescription form  
+  - Patient dashboard + log view  
+
+- **Backend**: Python + Firebase  
+  - NLP model APIs (SpaCy inference)  
+  - Real-time syncing via Firestore  
+  - Secure auth via Firebase Auth  
+  - Training data log for model feedback  
+
+- **Compliance Measures:**
+  - HTTPS communication  
+  - Encrypted Firestore access with RBAC  
+  - No PII stored on local devices  
+  - Token-based auth for API access 
+
+
+###  Workflow  
+
+1. Doctor logs in via Firebase  
+2. Dictates a prescription aloud  
+3. Text is processed by NLP engine  
+4. Top 3 drug/dosage/frequency matches are shown  
+5. Doctor edits or accepts → Rx is finalized and saved  
+6. Data from rejections/overrides is stored for **continuous learning**
+
+> Example spoken input:  
+> _"Give 500 milligrams amoxicillin twice a day for sore throat."_  
+> → Output suggestions:  
+> - **Amoxicillin 250mg**
+> - **Amoxicillin 500mg**
+> - **Amoxicillin 750mg**  
+> *(Doctor selects 500mg → confirmed.)*
+
+
+###  Results
+
+| Metric                            | Result                          |
+|-----------------------------------|----------------------------------|
+| Final NER accuracy                | **85%**                          |
+| Avg. response latency             | **<900ms**                       |
+| Avg. Rx generation time saved     | **~30%**                         |
+| Prescriptions processed           | ~180 (internal testing)          |
+| Feedback entries for retraining   | 100+ (accepted/rejected cases)   |
+| HIPAA-compliant data handling     | ✅ Confirmed                     |
+
+
+###  Key Features  
+
+- Live voice-to-text transcription  
+- Medical NER for drugs, symptoms, dosages  
+- Autosuggest with top 3 editable options  
+- Manual override and real-time feedback logging  
+- Firebase-based secure login  
+- Patient logs and saved prescriptions  
+- Feedback-driven model improvement  
+
+
+###  Future Improvements  
+
+- Add **ICD-10 and RxNorm integration** for cross-system compatibility  
+- Deploy on **mobile platforms** for rural and emergency use  
+- Support **multi-accent audio training** for better transcription  
+- Build a **retraining pipeline** from feedback logs  
+- Automate **summary reports** from patient logs  
+
+
+###  Reflection  
+
+This project pushed me to **think like an engineer and a designer** — balancing real-world healthcare needs with cutting-edge NLP techniques. The **feedback-driven UI**, layered NLP stack, and retraining loop gave me hands-on experience with how **AI can enhance — not replace — expert workflows**.
+
+> Tech should adapt to the user, not the other way around — especially when lives are on the line.
+    `,
+  },
   {
     id: 3,
     title: "High-Performance Search Engine",
@@ -975,6 +1031,6 @@ export const categories = [
   "Data Engineering",
   "MLOps & Deployment",
   "Automation Tools",
-  "Full-Stack Projects",
+  "Full-Stack",
   "Analytics"
 ];
