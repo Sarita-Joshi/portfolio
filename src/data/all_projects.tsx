@@ -423,11 +423,11 @@ In a world where trust in institutions is shaky, **transparency can be engineere
     "NLP",
   ],
   gradient: "from-yellow-400 to-pink-500",
-  featured: true,
+  featured: false,
   metrics: "Real-time suggestions with <300ms response time",
   category: ["Generative AI", "Full-Stack"],
   github: "https://github.com/Sarita-Joshi/Smart-Email-Compose-GPT-2-and-T5",
-  demo: "sarita-joshi.github.io/smart-Email-Compose-GPT-2-and-T5/",
+  demo: "https://sarita-joshi.github.io/smart-Email-Compose-GPT-2-and-T5/",
   content: `
 ### Overview
 Recreated Gmail’s smart compose experience by fine-tuning two language models (GPT-2 and T5-small) on the Enron email dataset. Built a full-stack app to serve suggestions via a FastAPI backend with React frontend.
