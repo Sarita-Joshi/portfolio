@@ -15,7 +15,7 @@ const Education = () => {
       period: "Jan 2024 - May 2025",
       gpa: "4/4",
       coursework: [
-        "Advanced Algorithms & Data Structures",
+        "Software Architecture & Design",
         "Machine Learning & Deep Learning",
         "Distributed Systems & Cloud Computing",
       ],
@@ -29,9 +29,9 @@ const Education = () => {
       gpa: "9.5/10",
       coursework: [
         "Data Structures & Algorithms",
-        "Database Management Systems",
-        "Computer Networks",
-        "Software Engineering",
+        "Web backend Engineering",
+        "Data Mining & Warehousing",
+        "Software Development and Project Management",
       ],
       current: false,
     },

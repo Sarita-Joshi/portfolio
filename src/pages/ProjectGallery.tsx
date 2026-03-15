@@ -1,5 +1,6 @@
 
 import { Link } from 'react-router-dom';
+import { Briefcase, GraduationCap, User, Trophy } from "lucide-react";
 import { ArrowRight, Star, Github, ExternalLink } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
@@ -15,6 +16,15 @@ const ProjectGallery = () => {
     return selectedCategories.some(cat => project.category.includes(cat));
   });
 
+  // utils or inside same component
+const workTypeIcons = {
+  Professional: "💼",
+  Academic: "🎓",
+  Personal: "🧠",
+  Hackathon: "🏆", // optional extra type if you want
+};
+
+
   return (
     <div id='top' className="min-h-screen bg-gray-900">
       <Navigation />
@@ -26,7 +36,7 @@ const ProjectGallery = () => {
               Project Gallery
             </h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Comprehensive portfolio showcasing data engineering, ML, and system automation projects
+              Comprehensive portfolio showcasing software engineering, AI/ML, and system automation projects
             </p>
           </div>
 
@@ -63,7 +73,9 @@ const ProjectGallery = () => {
           <div className="mb-16">
 
             <div className="grid md:grid-cols-3 gap-8">
-              {filteredProjects.map((project, index) => (
+              {filteredProjects
+              .sort((a, b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1))
+              .map((project, index) => (
                 <motion.div
     key={project.id}
     initial={{ opacity: 0, y: 30 }}
@@ -75,21 +87,36 @@ const ProjectGallery = () => {
                   <div className={`h-2 bg-gradient-to-r ${project.gradient}`}></div>
                   <div className="p-8">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="bg-blue-900 text-green-300 px-3 py-1 rounded-full text-sm font-medium px-3 py-1 mr-1 rounded-full text-sm font-medium">
-                        {project.category[0]}
-                      </span>
-                      {project.featured && <Star className="w-5 h-5 text-yellow-500 fill-current" />}
-                    </div>
+  {/* Category Badge */}
+  <span className="bg-blue-900 text-green-300 px-3 py-1 rounded-full text-sm font-medium">
+    {project.category[0]}
+  </span>
+
+  {/* Icons Stack on the right */}
+  <div className="flex items-center space-x-2">
+    {project.featured && (
+      <Star className="w-5 h-5 text-yellow-400 fill-current" name="Featured" />
+    )}
+
+    {project.workType === "Professional" && (
+      <Briefcase className="w-5 h-5 text-amber-400" name="Professional Project" />
+    )}
+    {project.workType === "Academic" && (
+      <GraduationCap className="w-5 h-5 text-indigo-400" name="Academic Project" />
+    )}
+    {project.workType === "Hackathon" && (
+      <Trophy className="w-5 h-5 text-pink-400" name="Hackathon Winner" />
+    )}
+    {project.workType === "Personal" && (
+      <User className="w-5 h-5 text-emerald-400" name="Personal Project" />
+    )}
+  </div>
+</div>
+
+<h3 className="text-xl font-semibold">{project.title}</h3>
+
                     
-                    <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
-                    <p className="text-gray-300 mb-4 leading-relaxed">{project.description}</p>
-                    
-                    <div className="bg-gray-700/50 rounded-lg p-3 mb-4">
-                      <span className="text-sm font-medium text-gray-400">Key Metrics: </span>
-                      <span className="text-sm text-blue-400 font-medium">{project.metrics}</span>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-3 mt-3">
                       {project.tags.slice(0, 4).map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
@@ -104,6 +131,15 @@ const ProjectGallery = () => {
                         </span>
                       )}
                     </div>
+
+                    <p className="text-gray-300 mb-4 leading-relaxed">{project.description}</p>
+                    
+                    <div className="bg-gray-700/50 rounded-lg p-3 mb-4">
+                      <span className="text-sm font-medium text-gray-400">Key Metrics: </span>
+                      <span className="text-sm text-blue-400 font-medium">{project.metrics}</span>
+                    </div>
+                    
+                    
                     
                     <div className="flex gap-4">
                       <Link

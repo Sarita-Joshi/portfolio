@@ -1,3 +1,5 @@
+import { workerData } from "worker_threads";
+
 export const allProjects = [
   {
     id: 1,
@@ -16,7 +18,8 @@ export const allProjects = [
     gradient: "from-red-500 to-orange-500",
     featured: true,
     metrics: "100K+ transactions/hour, 92% accuracy",
-    category: ["Data Engineering"],
+    category: ["Full-Stack","Data & Analytics"],
+    workType: "Academic",
     github: "https://github.com/Sarita-Joshi/Credit-Card-Fraud-Detection-Spark",
     // demo: "https://fraud-detection-demo.com",
     content: `
@@ -109,11 +112,12 @@ It's one thing to train a model. It’s another to make it *react instantly* und
     description:
       "Built an autonomous storytelling agent system leveraging LangChain agents for dynamic article generation with voiceover, formatting, and automated publishing.",
     date: "Mar 2025 - Apr 2025",
-    tags: ["LangChain", "OpenAI", "Python", "Agentic AI", "RAG", "Automation"],
+    tags: ["LangChain", "Agentic AI", "RAG", "OpenAI", "Python", "Automation"],
     gradient: "from-fuchsia-500 to-purple-600",
-    featured: true,
+    featured: false,
     metrics: "10+ article workflows automated, 2x content velocity",
-    category: ["Generative AI", "Automation"],
+    category: ["AI/ML"],
+    workType: "Personal",
     github: "https://github.com/Sarita-Joshi/multi-agent-llm-article-generation",
     demo: "https://llm-autostory-demo.com",
     content: `
@@ -181,9 +185,10 @@ This project isn’t just about article generation — it's a **blueprint for bu
       date: "Jan 2023 - Dec 2023",
       tags: ["OpenAI", "LangChain", "Python", "Salesforce", "NLP"],
     gradient: "from-indigo-500 to-blue-500",
-    featured: true,
+    featured: false,
     metrics: "30% automation rate, <2% reopen rate",
-    category: ["Generative AI", "MLOps & Deployment"],
+    category: ["AI / ML"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -208,6 +213,66 @@ Deployed RAG-based chatbot to assist with patient queries and support tickets.
     `,
   },
   {
+  id: 19,
+  title: "Graph RAG: From Notes to Knowledge Graphs",
+  description:
+    "Transforms unstructured notes into a queryable knowledge graph using LLMs and graph traversal instead of vector similarity for multi-hop reasoning.",
+  date: "Jun 2025",
+  tags: [
+    "FastAPI",
+    "React",
+    "D3.js",
+    "LlamaIndex",
+    "Graph RAG",
+    "TailwindCSS",
+    "Python",
+  ],
+  gradient: "from-sky-500 to-indigo-500",
+  featured: true,
+  metrics: "Interactive graph-based RAG; live chat + visualization",
+  category: ["AI / ML"],
+  workType: "Personal",
+  github: "https://github.com/Sarita-Joshi/note-to-knowledge",
+  demo: "graph-whisperer-react-app-GoogleChrome2025-06-1600-57-52-ezgif.com-video-speed.mp4",
+  content: `
+### Overview  
+This project turns **unstructured notes into a queryable knowledge graph** using LLMs. Instead of retrieving text chunks based on vector similarity, it leverages **graph traversal and entity relationships** to support **multi-hop reasoning**.
+
+### Features  
+- Upload and parse raw text or notes  
+- Extract (Entity A) —[Relation]→ (Entity B) triples using LLM prompts  
+- Construct a live, visual knowledge graph  
+- Query via chat interface grounded in graph context  
+- Modular API-first backend for reuse in bots or agents  
+
+### Tech Stack  
+| Layer | Technology |
+|-------|-------------|
+| Frontend | React, TailwindCSS |
+| Backend | FastAPI (Python) |
+| RAG Engine | LlamaIndex (Graph RAG) |
+| Visualization | D3.js |
+| Future Plans | Neo4j, spaCy, Hybrid RAG |
+
+### Key Implementation Notes  
+- FastAPI backend handles ingestion and retrieval  
+- React + D3 visualize nodes and relationships  
+- Async issues in LlamaIndex handled via sync wrappers or asyncio.run()  
+- Upcoming: Neo4j persistence, entity resolution, feedback validation loops  
+
+### Roadmap  
+- Neo4j persistent graph storage  
+- Entity resolution via spaCy or embeddings  
+- Hybrid Graph + Vector RAG  
+- Feedback loop for triple validation  
+- Graph memory integration for agents  
+
+### Source  
+[GitHub Repository](https://github.com/Sarita-Joshi/note-to-knowledge)
+`,
+}
+,
+  {
   id: 17,
   title: "OCTA Traffic & Demand Analytics",
   description:
@@ -215,9 +280,10 @@ Deployed RAG-based chatbot to assist with patient queries and support tickets.
   date: "Oct 2024",
   tags: ["Alteryx", "Tableau", "Data Visualization", "Transportation", "Urban Planning"],
   gradient: "from-amber-500 to-yellow-600",
-  featured: true,
+  featured: false,
   metrics: "40% faster insight generation, 3 key infrastructure recommendations",
-  category: ["Data Analytics", "Data Engineering"],
+  category: [ "Data & Analytics"],
+  workType: "Hackathon",
   github: "", // If you have a public repo or report link, add it here
   demo: "", // If there's a Tableau dashboard or hosted report, you can link it here
   content: `
@@ -307,6 +373,7 @@ Working with OCTA’s projections helped us understand how **human-centered desi
     featured: false,
     metrics: "100+ verified applicants, 95% data accuracy",
     category: ["Full-Stack"],
+    workType: "Academic",
     github: "https://github.com/Sarita-Joshi/Blockchain-Scholarship-Funing",
     content: `
 ###  The Problem  
@@ -423,9 +490,10 @@ In a world where trust in institutions is shaky, **transparency can be engineere
     "NLP",
   ],
   gradient: "from-yellow-400 to-pink-500",
-  featured: false,
+  featured: true,
   metrics: "Real-time suggestions with <300ms response time",
-  category: ["Generative AI", "Full-Stack"],
+  category: ["AI / ML", "Full-Stack"],
+  workType: "Personal",
   github: "https://github.com/Sarita-Joshi/Smart-Email-Compose-GPT-2-and-T5",
   demo: "https://sarita-joshi.github.io/smart-Email-Compose-GPT-2-and-T5/",
   content: `
@@ -480,7 +548,8 @@ Recreated Gmail’s smart compose experience by fine-tuning two language models 
     gradient: "from-lime-500 to-green-500",
     featured: false,
     metrics: "94% classification accuracy, 3x faster sorting",
-    category: ["MLOps & Deployment"],
+    category: ["AI / ML", "Full-Stack"],
+    workType: "Hackathon",
     github: "https://github.com/sarita-joshi/ecometer-waste-classifier",
     demo: "https://ecometer-demo.com",
     content: `
@@ -592,9 +661,10 @@ EcoMeter was ahead of its time — built before sustainability became mainstream
       date: "Aug 2022 - Dec 2022",
       tags: ["Python", "React.js", "Firebase", "SpaCy", "NER", "SNOMED"],
     gradient: "from-blue-500 to-cyan-500",
-    featured: false,
+    featured: true,
     metrics: "85% NER accuracy, 30% faster response,  HIPAA-compliant",
-    category: ["MLOps & Deployment", "Full-stack"],
+    category: ["Full-Stack", "AI / ML"],
+    workType: "Hackathon",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ###  Project Motivation  
@@ -719,8 +789,9 @@ This project pushed me to **think like an engineer and a designer** — balancin
       tags: ["ElasticSearch", "SQL", "NLP", "Python", "Azure"],
     gradient: "from-green-500 to-emerald-500",
     featured: false,
-    metrics: "<30ms response, 70% CTR, 98% fewer zero results",
-    category: ["Data Engineering", "MLOps & Deployment"],
+    metrics: "<30ms response, 70% CTR, <1% zero result queries",
+    category: ["Full-Stack","Data & Analytics", "AI / ML"],
+    workType: "Hackathon",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -740,8 +811,8 @@ Deployed a healthcare provider search engine using ElasticSearch and NLP-based s
 - Synonym handling needs manual update
 
 ### Impact
-- Reduced zero-result queries by 98%
-- Increased CTR by 70%
+- Reduced zero-result queries to <1%
+- Increased CTR upto 70%
     `,
   },
 
@@ -761,7 +832,8 @@ Deployed a healthcare provider search engine using ElasticSearch and NLP-based s
     gradient: "from-purple-500 to-pink-500",
     featured: false,
     metrics: "33% testing time reduction",
-    category: ["Full-Stack", "Automation"],
+    category: ["Full-Stack", "AI / ML"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -794,7 +866,8 @@ Automated validation of embedded SDS modules across MBUX versions.
     gradient: "from-teal-500 to-green-500",
     featured: false,
     metrics: "300K+ events/day processed",
-    category: ["Data Engineering", "Automation"],
+    category: ["Data & Analytics"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -828,7 +901,8 @@ Built event-driven pipelines syncing data across internal tools and external CRM
     gradient: "from-yellow-500 to-orange-500",
     featured: false,
     metrics: "2x campaign conversions, 2M+ leads",
-    category: ["Data Analytics", "MLOps & Deployment"],
+    category: ["Data & Analytics"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -857,11 +931,12 @@ Developed a lead prioritization tool using ML and visualized insights via PowerB
     description:
       "Built a FastAPI-based API gateway with Docker and Kubernetes, supporting 10K+ requests/min, and integrated Prometheus-Grafana monitoring for 99.9% uptime and real-time insights.",
       date: "Jan 2025 - Feb 2025",
-      tags: ["FastAPI", "Docker", "Kubernetes", "Python", "API Design", "Grafana", "Prometheus", "DevOps", "Monitoring"],
+      tags: ["DevOps", "Deployment", "observability", "FastAPI", "Docker", "Kubernetes", "Python", "API Design", "Grafana", "Prometheus", "DevOps", "Monitoring"],
     gradient: "from-pink-500 to-red-500",
     featured: false,
     metrics: "10K+ requests/minute, 99.9% uptime monitoring",
-    category: ["Data Engineering", "MLOps & Deployment"],
+    category: ["Full-Stack"],
+    workType: "Personal",
     github: "https://github.com/Sarita-Joshi/CI-CD-Monitoring-Playground",
     content: `,
 ### Overview  
@@ -873,7 +948,7 @@ The goal was to create a scalable gateway system that could:
 - Support metric collection and performance monitoring  
 - Act as a **deployment backbone for ML inference APIs or data ingestion endpoints**
 
-This forms the foundation for **serving production ML models**, exposing **data engineering services**, or enabling **AI-driven applications** behind scalable, secure APIs.
+This forms the foundation for **serving production ML models**, exposing **Data & Analytics services**, or enabling **AI-driven applications** behind scalable, secure APIs.
 
 
 ### Why API Gateways Matter in Scalable AI Systems  
@@ -955,13 +1030,14 @@ This project was a deep dive into **scalable, observable backend design** using 
     id: 10,
     title: "Cloud Data Lake Solution",
     description:
-      "Engineered a sandbox data lake on Azure using Databricks, Synapse, and Blob Storage. Automated ingestion and partitioning for 8GB+ daily data flow.",
+      "Engineered integration pipelines on azure data lake using Databricks, Synapse, and Blob Storage. Automated ingestion and partitioning for multi-GB daily data flow.",
     date: "May 2025 - ",
-    tags: ["Azure", "Databricks", "Synapse", "Data Lake", "Big Data"],
+    tags: ["Azure", "Synapse", "Data Lake", "Databricks", "Big Data"],
     gradient: "from-purple-500 to-indigo-500",
     featured: false,
     metrics: "8GB+ daily processing",
-    category: ["Data Engineering"],
+    category: ["Data & Analytics"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -1000,7 +1076,8 @@ Integrated scalable lakehouse for healthcare analytics on Azure cloud.
     gradient: "from-sky-500 to-purple-500",
     featured: false,
     metrics: "40% effort reduction",
-    category: ["Generative AI", "MLOps & Deployment"],
+    category: ["Data & Analytics"],
+    workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
 ### Overview
@@ -1027,10 +1104,7 @@ Developed internal chatbot to assist finance team with vendor and policy workflo
 
 export const categories = [
   "All",
-  "Generative AI",
-  "Data Engineering",
-  "MLOps & Deployment",
-  "Automation Tools",
+  "AI / ML",
+  "Data & Analytics",
   "Full-Stack",
-  "Analytics"
 ];

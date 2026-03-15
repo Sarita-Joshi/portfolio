@@ -19,20 +19,20 @@ const Hero = () => {
   }, []);
 
   const chatMessages = [
-    { type: "user", text: "Tell me about Sarita’s expertise." },
+    { type: "user", text: "Hey, Who's Sarita?" },
     {
       type: "bot",
-      text: "Sarita is an experienced engineer blending AI, data engineering, and product thinking to build smart, scalable systems.",
+      text: "Sarita is an experienced software engineer blending AI, data and product thinking to build smart, scalable systems.",
     },
     { type: "user", text: "Nice! What's her vibe?" },
     {
       type: "bot",
       text: "Creative, curious, and driven. She’s always chasing the next challenge and finishing it with flair.",
     },
-    { type: "user", text: "She sounds like someone I’d hire." },
+    { type: "user", text: "She sounds like someone I’d work with." },
     {
       type: "bot",
-      text: "She sounds like someone who’d impress you. Let’s get started.",
+      text: "She just might be. Let’s take a look at what she’s been building.",
     },
   ];
 
@@ -144,7 +144,7 @@ const Hero = () => {
             <div className="flex items-center mb-6 pb-4 border-b border-gray-700">
               <Bot className="w-6 h-6 text-blue-400 mr-3" />
               <h3 className="text-lg font-semibold text-white">
-                Interactive Introduction
+                Quick Chat
               </h3>
               <div className="ml-auto flex space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>

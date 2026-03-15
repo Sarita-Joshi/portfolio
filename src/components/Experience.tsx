@@ -1,57 +1,150 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Briefcase, MapPin, Calendar } from 'lucide-react';
+import { Briefcase, MapPin, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from "framer-motion";
+
+const COLLAPSED_BULLETS = 3;
+
+function ExperienceCard({ exp }: { exp: any }) {
+  const [open, setOpen] = useState(false);
+
+  const shouldShowToggle =
+    (exp?.achievements?.length || 0) > COLLAPSED_BULLETS ||
+    (exp?.description?.length || 0) > 160;
+
+  const visibleAchievements = open
+    ? exp.achievements
+    : exp.achievements.slice(0, COLLAPSED_BULLETS);
+
+  return (
+    <div className="md:ml-0 md:ml-auto md:w-3/4 md:pl-8">
+      <div className="relative bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-lg hover:shadow-cyan-300/10 hover:scale-105 transition-all duration-300">
+        <div className="flex items-center mb-4">
+          <Briefcase className="w-5 h-5 text-blue-400 mr-2" />
+          <span className="text-sm font-medium text-blue-400">{exp.period}</span>
+          {exp.current && (
+            <span className="ml-2 bg-green-800 text-green-300 px-2 py-1 rounded-full text-xs font-medium">
+              Current
+            </span>
+          )}
+        </div>
+
+        <h3 className="text-xl font-bold text-white mb-1">{exp.title}</h3>
+        <h4 className="text-lg text-blue-400 mb-1">{exp.company}</h4>
+        <p className="text-sm text-gray-400 mb-4">{exp.location}</p>
+
+        {/* Description (clamped on mobile when closed) */}
+        <div className="relative">
+          <p
+            className={[
+              "text-gray-300 leading-relaxed mb-4",
+              // If you don't have the Tailwind line-clamp plugin, replace with inline styles (see below).
+              open ? "" : "line-clamp-4 md:line-clamp-none",
+            ].join(" ")}
+            /* Fallback if you don't use line-clamp plugin:
+            style={open ? {} : {
+              display: "-webkit-box",
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden"
+            }} */
+          >
+            {exp.description}
+          </p>
+
+          {/* Soft fade only on mobile & when collapsed */}
+          {!open && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 md:hidden bg-gradient-to-t from-gray-800/90 to-transparent rounded-b-2xl" />
+          )}
+        </div>
+
+        {/* Achievements (trimmed on mobile when closed) */}
+        <ul className="space-y-2">
+          {visibleAchievements.map((achievement: string, achIndex: number) => (
+            <li key={achIndex} className="flex items-start">
+              <span className="w-2 h-2 bg-green-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span className="text-gray-200 text-sm">{achievement}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Toggle button (mobile only) */}
+        {shouldShowToggle && (
+          <button
+            onClick={() => setOpen(v => !v)}
+            className="mt-4 md:hidden inline-flex items-center gap-1 text-sm font-medium text-cyan-300 hover:text-cyan-200"
+            aria-expanded={open}
+            aria-label={open ? "View less" : "View more"}
+          >
+            {open ? (
+              <>
+                View less <ChevronUp className="w-4 h-4" />
+              </>
+            ) : (
+              <>
+                View more <ChevronDown className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const Experience = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const experiences = [
-    {
-      title: "Engineering Intern – Vehicle Speech Recognition",
-      company: "Mercedes-Benz R&D North America",
-      location: "Long Beach, CA",
-      period: "Jan 2025 – May 2025",
-      description:
-        "Engineering advanced speech recognition systems for next-generation MBUX integration in cloud-connected embedded environments.",
-      achievements: [
-        "Created E2E test automation tool reducing development testing time by 33%",
-        "Designed multi-process Python workflows for ECU communication and audio processing",
-        "Collaborated with regional teams in Agile environment for MBUX integration goals",
-      ],
-      current: true,
-    },
-    {
-      title: "Data Engineer",
-      company: "Bajaj Finserv Health Ltd",
-      location: "India",
-      period: "Jun 2021 - Dec 2023",
-      description:
-        "Led data engineering initiatives, building scalable systems and AI-powered solutions for healthcare technology platform.",
-      achievements: [
-        "Architected high-performance search engine with <30ms response times and 70% CTR",
-        "Built real-time event-driven integration system processing 300K+ webhook events/day",
-        "Developed GenAI chatbot automating 30% of tickets with <2% reopen rate",
-        "Deployed production models using CI/CD, Kubernetes, and comprehensive monitoring",
-      ],
-      current: false,
-    },
-    {
-      title: "Data Engineering Intern",
-      company: "Bajaj Finserv Health Ltd",
-      location: "India",
-      period: "Sep 2020 – May 2021",
-      description:
-        "Built foundational data infrastructure and ETL pipelines for healthcare analytics and machine learning applications.",
-      achievements: [
-        "Engineered Spark ETL pipelines processing ~8GB/day via Kafka and ADF",
-        "Powered sales propensity model for 2M+ leads, doubling campaign conversions",
-        "Created Python toolkit for data ingestion adopted across engineering teams",
-        "Optimized data lake workflows integrating Blob Storage, Synapse, and Databricks",
-      ],
-      current: false,
-    },
-  ];
+  {
+    title: "Software Engineering Intern – Speech AI",
+    company: "Mercedes-Benz R&D North America",
+    location: "Long Beach, CA",
+    period: "Jan 2025 – May 2025",
+    description:
+      "Developing automation and AI validation tools for in-vehicle speech and NLP systems powering next-generation MBUX experiences.",
+    achievements: [
+      "Engineered a Python-based test automation platform integrating LLMs to validate dialog accuracy, reducing regression time by 85%. (4 min -> 30 sec)",
+      "Automated QA for 250+ speech scenarios via multi-process pipelines, ECU communication, log analysis, and audio data processing to streamline testing workflows.",
+      "Performed data aggregation and trend analysis on speech logs and accuracy metrics using Python and Pandas to generate BI reports for evaluation.",
+      "Partnered with engineers to debug model and system interactions, improving test reliability and coverage by 48%.",
+    ],
+    current: true,
+  },
+  {
+    title: "Software Engineer",
+    company: "Bajaj Finserv Health Ltd",
+    location: "India",
+    period: "Jan 2021 – Dec 2023",
+    description:
+      "Led cross-functional engineering and initiatives, building data-driven backend systems and AI automation for a large-scale healthcare platform.",
+    achievements: [
+      "Developed distributed microservices and event-driven architectures across 22+ systems, supporting 300k+ events/day, improving scalability and uptime.",
+      "Built LLM-driven chatbots and automation workflows (OpenAI, LangChain, Salesforce) for ticket triaging and auto-resolving 30% of customer support queries and saving 320+ hrs/month.",
+      "Designed and deployed high-traffic search APIs (Elasticsearch, Redis, Node.js) with NLP-based ranking, achieving sub-30 ms latency and 70% CTR, serving 1M+ requests daily",
+      "Enhanced claim tracking and CX analytics to identify service bottlenecks and operational KPIs driving a 15% improvement in satisfaction scores.",
+      "Implemented data pipelines and model monitoring in Azure using Docker, Kubernetes, and CI/CD to operationalize ML workflows.",
+      "Enhanced observability with Grafana and Prometheus dashboards, reducing daily errors by 75% and accelerating root-cause analysis.",
+  
+    ],
+    current: false,
+  },
+  {
+    title: "Software Engineering Intern",
+    company: "Bajaj Finserv Health Ltd",
+    location: "India",
+    period: "Sep 2020 – Jan 2021",
+    description:
+      "Contributed to backend and data infrastructure development supporting analytics and predictive modeling efforts.",
+    achievements: [
+      "Built a real-time document validation microservice and data models for claims processing, cutting review time by 20%.",
+      "Built sales propensity and lead-targeting models on 2M+ records, boosting marketing conversion rates by 2×.",
+      "Developed ETL pipelines and REST APIs integrating Kafka, Spark, and Azure SQL, improving data accessibility and transfer efficiency by 25%.",
+      "Created test automation and QA coverage (Jest, Postman, Selenium) increasing reliability and reducing deployment defects by 30%.",
+    ],
+    current: false,
+  },
+];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -82,7 +175,7 @@ return (
           Professional Experience
         </h2>
         <p className="text-xl text-gray-300">
-          Journey in data engineering, ML systems, and automotive technology
+          Journey in technology, AI, and scalable systems
         </p>
       </motion.div>
 
@@ -124,34 +217,7 @@ return (
               </div>
 
               {/* Card */}
-              <div className="md:ml-0 md:ml-auto md:w-3/4 md:pl-8">
-                <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-lg hover:shadow-cyan-300/10 hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center mb-4">
-                    <Briefcase className="w-5 h-5 text-blue-400 mr-2" />
-                    <span className="text-sm font-medium text-blue-400">{exp.period}</span>
-                    {exp.current && (
-                      <span className="ml-2 bg-green-800 text-green-300 px-2 py-1 rounded-full text-xs font-medium">
-                        Current
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="text-xl font-bold text-white mb-1">{exp.title}</h3>
-                  <h4 className="text-lg text-blue-400 mb-1">{exp.company}</h4>
-                  <p className="text-sm text-gray-400 mb-4">{exp.location}</p>
-
-                  <p className="text-gray-300 mb-4 leading-relaxed">{exp.description}</p>
-
-                  <ul className="space-y-2">
-                    {exp.achievements.map((achievement, achIndex) => (
-                      <li key={achIndex} className="flex items-start">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                        <span className="text-gray-200 text-sm">{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <ExperienceCard exp={exp} />
             </motion.div>
           ))}
         </motion.div>
