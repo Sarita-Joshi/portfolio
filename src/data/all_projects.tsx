@@ -189,25 +189,73 @@ This project isn’t just about article generation — it's a **blueprint for bu
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Deployed RAG-based chatbot to assist with patient queries and support tickets.
+### The Problem: Support Tickets Were Drowning the Team
 
-### Tech Stack
-- **OpenAI + LangChain** for generative responses
-- **Salesforce** for user data and ticket syncing
-- **Azure SQL** for logging & metrics
+The customer support team at Bajaj Finserv Health was handling thousands of tickets daily — everything from "where's my claim?" to "how do I update my insurance plan?" Most of these were repetitive, well-documented questions, but each still required a human agent to read, understand, and respond. The result: long wait times, agent burnout, and inconsistent answer quality.
 
-### Features
-- Ticket triage with confidence scoring
-- RAG for document-grounded answers
+The goal was to build an **AI-powered chatbot** that could autonomously resolve common queries while intelligently escalating complex ones — without frustrating the user.
 
-### Limitations
-- Long prompts increased inference time
-- Some sensitive queries required escalation
 
-### Impact
-- Automated 30% tickets
-- <2% reopen rate across 2 months
+### Architecture
+
+The system was built as a **RAG (Retrieval-Augmented Generation) pipeline** integrated with Salesforce for ticket management:
+
+\`\`\`
+User Query → Intent Classification → RAG Retrieval → LLM Response Generation → Salesforce Sync
+                                          ↓
+                                   Knowledge Base
+                                (FAQs, Policy Docs,
+                                 Claim Procedures)
+\`\`\`
+
+#### Core Components
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| LLM | OpenAI GPT (ChatGPT API) | Response generation |
+| Orchestration | LangChain | Prompt chaining, retrieval, memory |
+| Knowledge Base | Internal docs, FAQs, policy PDFs | Grounding source for RAG |
+| CRM Integration | Salesforce | Ticket creation, status sync, agent handoff |
+| Logging | Azure SQL | Query logs, confidence scores, resolution tracking |
+
+
+### The Triaging Flow
+
+Not every query should go to the LLM. The system used a **confidence-based triage pipeline**:
+
+1. **Intent Detection** — Classify the incoming query (claim status, policy info, complaint, general FAQ)
+2. **RAG Retrieval** — Pull the most relevant documents from the knowledge base using vector similarity
+3. **Response Generation** — LLM generates a grounded answer using retrieved context
+4. **Confidence Scoring** — If the model's confidence falls below threshold, the ticket is routed to a human agent with full context attached
+5. **Salesforce Sync** — Every interaction is logged as a Salesforce case — whether auto-resolved or escalated
+
+This meant agents only handled the genuinely complex cases, and when they did, they had the full conversation history and retrieved context already attached.
+
+
+### Handling Edge Cases
+
+- **Sensitive queries** (billing disputes, legal complaints) were auto-escalated regardless of confidence — certain intent categories always went to humans
+- **Ambiguous queries** got a clarification prompt before attempting resolution
+- **Multi-turn conversations** used LangChain's conversation memory to maintain context across follow-ups
+
+
+### Results
+
+| Metric | Value |
+|--------|-------|
+| Ticket auto-resolution rate | **30%** |
+| Reopen rate | **<2%** (over 2 months) |
+| Agent time saved | **320+ hours/month** |
+| Average response time | **<5 seconds** (vs 4+ hours for human response) |
+
+The <2% reopen rate was the key validation — it meant the bot wasn't just closing tickets, it was actually resolving them correctly.
+
+
+### Challenges & Learnings
+
+- **Prompt engineering was critical** — early prompts generated verbose, off-topic responses. Iterating on system prompts with few-shot examples dramatically improved answer quality
+- **Latency vs quality tradeoff** — longer context windows improved accuracy but increased response time. Settled on a chunked retrieval approach with top-3 document passages
+- **Knowledge base freshness** — policy documents changed frequently. Built a weekly re-indexing pipeline to keep the RAG source current
     `,
   },
   {
@@ -233,40 +281,92 @@ Deployed RAG-based chatbot to assist with patient queries and support tickets.
   github: "https://github.com/Sarita-Joshi/note-to-knowledge",
   demo: "graph-whisperer-react-app-GoogleChrome2025-06-1600-57-52-ezgif.com-video-speed.mp4",
   content: `
-### Overview  
-This project turns **unstructured notes into a queryable knowledge graph** using LLMs. Instead of retrieving text chunks based on vector similarity, it leverages **graph traversal and entity relationships** to support **multi-hop reasoning**.
+### The Idea: What If Your Notes Could Think?
 
-### Features  
-- Upload and parse raw text or notes  
-- Extract (Entity A) —[Relation]→ (Entity B) triples using LLM prompts  
-- Construct a live, visual knowledge graph  
-- Query via chat interface grounded in graph context  
-- Modular API-first backend for reuse in bots or agents  
+Traditional RAG systems work by chunking documents, embedding them into vectors, and retrieving the most similar chunks to a query. This works well for direct lookups — but falls apart when answering questions that require **connecting information across multiple notes**.
 
-### Tech Stack  
-| Layer | Technology |
-|-------|-------------|
-| Frontend | React, TailwindCSS |
-| Backend | FastAPI (Python) |
-| RAG Engine | LlamaIndex (Graph RAG) |
-| Visualization | D3.js |
-| Future Plans | Neo4j, spaCy, Hybrid RAG |
+For example, if Note A says "Project X uses Kafka" and Note B says "Kafka requires Zookeeper for coordination," a vector search for "what does Project X depend on?" might retrieve Note A but miss Note B entirely. The relationship chain \`Project X → Kafka → Zookeeper\` is invisible to vector similarity.
 
-### Key Implementation Notes  
-- FastAPI backend handles ingestion and retrieval  
-- React + D3 visualize nodes and relationships  
-- Async issues in LlamaIndex handled via sync wrappers or asyncio.run()  
-- Upcoming: Neo4j persistence, entity resolution, feedback validation loops  
+**Graph RAG** solves this by extracting **entities and relationships** from text and building a **knowledge graph** that can be traversed for multi-hop reasoning.
 
-### Roadmap  
-- Neo4j persistent graph storage  
-- Entity resolution via spaCy or embeddings  
-- Hybrid Graph + Vector RAG  
-- Feedback loop for triple validation  
-- Graph memory integration for agents  
 
-### Source  
-[GitHub Repository](https://github.com/Sarita-Joshi/note-to-knowledge)
+### How It Works
+
+#### 1. Document Ingestion
+Users upload raw text or notes through the React frontend. The backend receives the content via \`POST /upload\` and triggers the extraction pipeline.
+
+#### 2. Triple Extraction
+An LLM (configurable — supports **OpenAI, Gemini, and Groq**) processes each document and extracts structured relationships in the form:
+
+\`\`\`
+(Entity A) —[Relationship]→ (Entity B)
+\`\`\`
+
+For example, from the text *"Sarita built a fraud detection system using Spark and Kafka"*, the LLM extracts:
+- (Sarita) —[built]→ (Fraud Detection System)
+- (Fraud Detection System) —[uses]→ (Spark)
+- (Fraud Detection System) —[uses]→ (Kafka)
+
+#### 3. Knowledge Graph Construction
+Extracted triples are assembled into a graph structure where:
+- **Nodes** = entities (people, tools, concepts, projects)
+- **Edges** = relationships between them
+
+The graph is served via \`GET /graph\` and rendered as an **interactive D3.js visualization** — users can see their knowledge network grow in real-time as they upload more notes.
+
+#### 4. Graph-Grounded Chat
+When a user asks a question via the chat interface (\`GET /chat\`), instead of vector similarity search, the system:
+1. Identifies relevant entities in the query
+2. Traverses the graph to find connected entity clusters
+3. Assembles the relevant triples as context
+4. Passes them to the LLM for a grounded response
+
+This means the system can answer **multi-hop questions** that require connecting information across different notes — something traditional RAG struggles with.
+
+
+### Architecture
+
+| Layer | Technology | Role |
+|-------|-----------|------|
+| Frontend | React, TailwindCSS | Upload interface, chat, settings |
+| Visualization | D3.js | Interactive knowledge graph rendering |
+| Backend | FastAPI (Python) | API layer for ingestion, graph, and chat |
+| RAG Engine | LlamaIndex (Graph RAG mode) | Triple extraction and graph-based retrieval |
+| LLM Providers | OpenAI, Gemini, Groq | Configurable — user selects in settings |
+
+
+### API Design
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| \`/upload\` | POST | Ingest documents, trigger triple extraction |
+| \`/graph\` | GET | Return nodes and edges for visualization |
+| \`/chat\` | GET | Query the graph, return LLM-grounded response |
+
+
+### Technical Challenges
+
+- **Async conflicts**: LlamaIndex's internal coroutines conflicted with FastAPI's async routing. Solved with \`asyncio.run()\` wrappers and careful sync/async boundary management
+- **Triple quality**: LLM-extracted triples aren't always clean — duplicate entities with slightly different names (e.g., "Kafka" vs "Apache Kafka") create fragmented graphs. Entity resolution is on the roadmap
+- **Graph scale**: D3.js visualization slows down with large graphs. Currently manageable for personal note collections, but would need clustering or pagination for larger corpora
+
+
+### What Makes This Different from Standard RAG
+
+| Aspect | Vector RAG | Graph RAG (this project) |
+|--------|-----------|------------------------|
+| Retrieval method | Cosine similarity on embeddings | Graph traversal on entity relationships |
+| Multi-hop reasoning | Weak — each chunk is independent | Strong — follows relationship chains |
+| Explainability | "These chunks were similar" | "These entities are connected because..." |
+| Context assembly | Top-K similar chunks | Connected subgraph around query entities |
+
+
+### Roadmap
+- **Neo4j** for persistent graph storage (currently in-memory)
+- **Entity resolution** via spaCy or embedding similarity to merge duplicate nodes
+- **Hybrid RAG** — combine graph traversal with vector retrieval for best of both worlds
+- **Feedback loops** — let users validate or correct extracted triples
+- **Agent memory** — use the knowledge graph as long-term memory for AI agents
 `,
 }
 ,
@@ -791,25 +891,63 @@ This project pushed me to **think like an engineer and a designer** — balancin
     workType: "Hackathon",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Deployed a healthcare provider search engine using ElasticSearch and NLP-based scoring models.
+### The Problem: Finding the Right Healthcare Provider Shouldn't Be Hard
 
-### Tech Stack
-- **ElasticSearch** for indexing and querying
-- **SQL** for metadata sync
-- **Azure + Python** backend API
+Healthcare platforms live or die by search. When a user types "cardiologist near me" or "Dr. Sharma pediatrics," they expect instant, relevant results — not a wall of irrelevant listings. The existing search was SQL-based, slow, and returned zero results far too often.
 
-### Features
-- Search-as-you-type
-- NLP-enhanced fuzzy ranking
+I was tasked with building a **search engine from scratch** — one that could handle 1M+ requests/day across 20+ endpoints, with sub-30ms latency and intelligent ranking.
 
-### Limitations
-- Cold-start issue for new providers
-- Synonym handling needs manual update
+
+### Architecture & Evolution
+
+**Phase 1: ELK Stack Foundation**
+The initial build used the classic ELK stack — **Elasticsearch** for indexing and retrieval, **Logstash** for log processing, and **Kibana** for monitoring search analytics. MySQL served as the source of truth for provider data.
+
+**Phase 2: Real-time Sync via CDC**
+Static index dumps weren't cutting it. Provider data changed constantly — new registrations, updated schedules, changed specialties. I migrated to a **Change Data Capture (CDC)** pipeline that streamed MySQL changes into Elasticsearch in near real-time, ensuring the index was always fresh.
+
+**Phase 3: Multi-Index Architecture**
+Different search contexts needed different index strategies:
+- **Provider search** — fuzzy matching on names, specialties, locations
+- **Facility search** — geo-based queries with distance scoring
+- **Service search** — keyword + category matching
+
+Each got its own optimized Elasticsearch index with custom analyzers and mappings. A **multi-index sync layer** kept everything consistent.
+
+
+### Custom Ranking Logic
+
+Off-the-shelf Elasticsearch scoring wasn't enough. I built a **custom ranking pipeline** that combined:
+
+| Signal | Purpose |
+|--------|---------|
+| Text relevance (BM25) | Base match quality |
+| Availability score | Prioritize providers with open slots |
+| User engagement (CTR) | Learn from what users actually click |
+| Recency boost | Favor recently active providers |
+| Geo-distance decay | Closer results rank higher |
+
+Rankings were tuned through **daily analysis and A/B testing** — we'd ship a scoring variant, measure CTR and conversion, and iterate weekly.
+
+
+### Scale & Performance
+
+- **20+ search endpoints** covering providers, facilities, services, and autocomplete
+- **1M+ requests/day** served through a Node.js API layer
+- **<30ms p95 latency** with Elasticsearch query caching and connection pooling
+- **<1% zero-result rate** — down from ~15% with the old SQL search
+- **70% CTR** on search results — a strong signal that ranking quality was high
+
+
+### Technical Challenges
+
+- **Index drift**: CDC pipelines occasionally fell behind during peak writes. Built a reconciliation job that ran nightly to catch any missed updates
+- **Synonym handling**: Medical terminology is full of aliases ("heart doctor" = "cardiologist"). Maintained a custom synonym dictionary updated monthly
+- **Cold-start providers**: New providers had no engagement data for ranking. Used a boosted-recency signal to give them initial visibility
+
 
 ### Impact
-- Reduced zero-result queries to <1%
-- Increased CTR upto 70%
+This search engine became the backbone of the platform's discovery experience — powering every provider lookup, facility finder, and service search across web and mobile. The jump from SQL queries to a purpose-built search stack transformed both user experience and business metrics.
     `,
   },
 
@@ -833,24 +971,66 @@ Deployed a healthcare provider search engine using ElasticSearch and NLP-based s
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Automated validation of embedded SDS modules across MBUX versions.
+### The Challenge: Testing Voice Assistants at Automotive Scale
 
-### Tech Stack
-- **Python + subprocess** for multi-thread orchestration
-- **DLT + ECU log parsing**
-- **TTS + STT** API integration
+At Mercedes-Benz R&D, the MBUX voice assistant is tested across hundreds of speech scenarios before every build release — think navigation commands, media controls, vehicle function triggers, and general knowledge queries. Previously, this was done **manually**: an engineer would sit in front of the vehicle hardware, speak a test phrase, wait for the response, and log whether it passed or failed.
 
-### Features
-- Plug-and-play log parser
-- Module isolation and automation via CLI
+This approach was slow (4+ minutes per scenario), error-prone, and didn't scale across the 250+ test cases needed per build cycle.
 
-### Limitations
-- Initial version lacks GUI
-- Log path was system-dependent
+I was brought on to **automate the entire end-to-end validation pipeline**.
+
+
+### How It Works
+
+The system replaces the human tester with an automated pipeline that handles speech generation, hardware communication, response capture, and result evaluation:
+
+#### 1. Test Phrase Generation (TTS)
+Instead of a human speaking, **Text-to-Speech (TTS)** generates audio for each test phrase. These are fed to the vehicle's microphone input, simulating a real driver interaction.
+
+#### 2. Vehicle Hardware Communication (DLT Protocol)
+The test rig connects to the vehicle's **ECU (Electronic Control Unit)** via the **DLT (Diagnostic Log and Trace)** protocol — the standard for embedded automotive logging. I wrote a **custom Python-based DLT logger** that:
+- Connects to the vehicle hardware over socket
+- Streams and parses real-time logs from the MBUX OS
+- Filters relevant dialog events from thousands of system messages
+
+#### 3. UI Activity Capture (OpenCV)
+For scenarios where the assistant responds visually (e.g., showing a navigation route or adjusting a setting), **OpenCV** captures and analyzes the vehicle display output — verifying that the correct screen rendered in response to the command.
+
+#### 4. Response Validation
+Each test case has an expected outcome. The system evaluates responses in two categories:
+
+| Response Type | Validation Method |
+|---------------|-------------------|
+| **Cloud responses** (general info, weather, etc.) | LLM-based semantic comparison against expected answers |
+| **Vehicle functions** (AC, windows, navigation) | DLT log tracking to verify the correct vehicle function was triggered |
+
+#### 5. Report Generation
+After each build cycle, the system generates a structured test report — pass/fail per scenario, response latency, confidence scores — and publishes it for the engineering team.
+
+
+### Multi-Process Architecture
+The pipeline runs as a **multi-process Python application**:
+- One process handles TTS audio playback and ECU communication
+- Another handles DLT log streaming and parsing
+- A third manages OpenCV screen capture
+- The main orchestrator coordinates timing, collects results, and generates reports
+
+This parallelism was critical — DLT logs stream continuously and can't be paused, so capture had to happen concurrently with test execution.
+
 
 ### Impact
-- 33% time saved in developer testing
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Time per scenario | ~4 minutes | ~30 seconds |
+| Regression time reduction | — | **85%** |
+| Test coverage | Manual subset | **250+ scenarios automated** |
+| Test reliability improvement | — | **48%** |
+
+### Technical Challenges
+- **DLT parsing**: No existing Python library handled Mercedes' custom DLT format well. The custom logger I built had to handle binary protocol parsing, message filtering, and reconnection on hardware resets
+- **Timing sensitivity**: TTS playback, ECU response, and log capture all had to be synchronized within tight windows — off by 500ms and you'd miss the response log
+- **Environment variability**: Different MBUX versions had different log formats and response patterns, requiring configurable parsing rules
     `,
   },
   {
@@ -867,25 +1047,76 @@ Automated validation of embedded SDS modules across MBUX versions.
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Built event-driven pipelines syncing data across internal tools and external CRMs.
+### The Problem: 22 Platforms, Zero Unified Tracking
 
-### Tech Stack
-- **Apache Airflow** DAGs for scheduling
-- **Python + SQL Server** for extraction and transformation
-- **Azure Key Vault + Blob Storage**
+At Bajaj Finserv Health, user interactions were scattered across dozens of systems — Salesforce for CRM, Google Analytics for web behavior, CleverTap and Netcore for push/WhatsApp engagement, ValueFirst for call center events, and multiple in-house services for app activity. Each platform had its own event format, its own webhook structure, and its own idea of what a "user action" looked like.
 
-### Features
-- 22+ platform syncs
-- SQL-based DAG step registry
+The business needed a **single, unified event backbone** that could ingest, normalize, and route 300K+ events/day across all these systems — reliably and in near real-time.
 
-### Limitations
-- Retry policies had edge cases
-- Manual re-triggers were needed
 
-### Impact
-- 300K+ webhooks/day
-- Reduced data lag from 2h to 5min
+### What Got Built
+
+An **event-driven integration framework** that acted as the central nervous system for all user communication and engagement data:
+
+#### Event Types Captured
+- **User lifecycle events**: app open/close, page views, drop-offs, sign-ups
+- **Communication events**: SMS sent/delivered, email opened/clicked, WhatsApp messages via CleverTap/Netcore
+- **Call center events**: inbound/outbound calls, IVR selections, agent assignments (ValueFirst)
+- **CRM events**: lead creation, stage changes, task assignments (Salesforce)
+- **Custom business events**: drop-off campaign triggers, re-engagement flows, funnel completions
+
+
+### Architecture
+
+\`\`\`
+External Platforms (22+)
+    ↓ webhooks / APIs
+Ingestion Layer (Python + Azure Functions)
+    ↓ normalize & validate
+Event Queue (Azure Service Bus)
+    ↓
+Processing Layer (Apache Airflow DAGs)
+    ↓ transform & enrich
+SQL Server (canonical event store)
+    ↓
+Downstream Consumers (dashboards, campaigns, analytics)
+\`\`\`
+
+#### Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| **Airflow for orchestration** | DAG-based scheduling gave visibility into every step, with built-in retry and alerting |
+| **SQL-based step registry** | Each DAG step was registered in a metadata table — making it easy to track what ran, when, and whether it succeeded |
+| **Azure Key Vault** | All API keys and webhook secrets stored centrally, rotated without code changes |
+| **Idempotent processing** | Every event had a unique ID — duplicates were detected and skipped at the ingestion layer |
+
+
+### Custom Drop-off Campaigns
+
+Beyond just moving data, the framework powered **intelligent re-engagement**. When a user dropped off mid-funnel (e.g., started a health plan purchase but didn't complete payment), the system would:
+
+1. Detect the drop-off event in real-time
+2. Classify the drop-off stage and user segment
+3. Trigger a personalized campaign (WhatsApp nudge, email reminder, or agent callback) via the appropriate channel
+
+These campaigns were fully configurable through a rules engine — marketing could adjust timing, channel, and message without engineering involvement.
+
+
+### Scale & Reliability
+
+| Metric | Value |
+|--------|-------|
+| Events processed daily | **300K+** |
+| Platforms integrated | **22+** |
+| Data lag (before → after) | **2 hours → 5 minutes** |
+| Webhook reliability | **99.5%** first-attempt delivery |
+
+### Challenges
+
+- **Webhook inconsistency**: Every platform had a different payload format, retry policy, and auth mechanism. Built a normalization layer with per-platform adapters
+- **Retry edge cases**: Some platforms sent duplicate webhooks on timeout. The idempotency layer caught most, but edge cases around partial processing required careful state tracking
+- **Airflow scaling**: At 300K events/day, Airflow's scheduler needed tuning — increased parallelism, optimized DAG parsing, and moved to CeleryExecutor for distributed task execution
     `,
   },
   {
@@ -902,24 +1133,78 @@ Built event-driven pipelines syncing data across internal tools and external CRM
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Developed a lead prioritization tool using ML and visualized insights via PowerBI dashboards.
+### The Problem: Marketing Was Flying Blind
 
-### Tech Stack
-- **Python (Scikit-learn)** for model training
-- **SQL** for feature engineering
-- **PowerBI + Tableau** for dashboards
+The sales and marketing team was running campaigns across millions of prospects — but treating them all equally. Every lead got the same outreach, the same cadence, the same messaging. The result: low conversion rates, wasted ad spend, and no way to tell which leads were actually worth pursuing.
 
-### Features
-- Campaign filters by score
-- Conversion likelihood meter
+The ask was straightforward: **build a system that scores leads by their likelihood to convert, so the team can focus on the ones that matter.**
 
-### Limitations
-- Scores needed periodic retraining
-- Data imbalance affected recall
 
-### Impact
-- Improved lead conversion by 2x
+### Approach: From Raw Data to Actionable Scores
+
+#### Data Foundation
+I started with **2M+ lead records** spanning demographic data, interaction history, campaign responses, and product interest signals. All sourced from SQL databases and CRM exports.
+
+#### Feature Engineering
+The raw data needed significant shaping before it was model-ready:
+
+| Feature Category | Examples |
+|-----------------|----------|
+| **Demographics** | Age, location, income bracket, occupation |
+| **Behavioral** | Pages visited, time on site, email opens/clicks |
+| **Campaign history** | Past campaign responses, channel preference, recency |
+| **Product signals** | Products viewed, quote requests, plan comparisons |
+
+Feature engineering was done in **SQL** for the heavy joins and aggregations, with **Python (Pandas)** for transformation and encoding.
+
+#### Model Training
+Tested multiple approaches using **Scikit-learn**:
+
+| Model | Precision | Recall | Notes |
+|-------|-----------|--------|-------|
+| Logistic Regression | Good | Moderate | Fast, interpretable baseline |
+| Random Forest | Better | Better | Handled feature interactions well |
+| Gradient Boosting (XGBoost) | Best | Best | Final production model |
+
+The key challenge was **class imbalance** — converters were a small fraction of total leads. Used SMOTE oversampling and adjusted class weights to improve recall without tanking precision.
+
+
+### The Dashboard
+
+Scores alone weren't useful without a way for the marketing team to act on them. Built interactive dashboards in **Power BI and Tableau** that enabled:
+
+- **Lead scoring view** — every prospect ranked by conversion probability, filterable by segment, region, and campaign
+- **Campaign performance** — which campaigns were attracting high-score leads vs low-score ones
+- **Strategy comparison** — A/B views showing conversion rates across different targeting approaches
+- **Score distribution** — understanding how scores shifted over time and across cohorts
+
+
+### Iterating on Strategy
+
+The real value wasn't just the model — it was the **feedback loop**. The team could:
+
+1. Run a campaign targeting only high-score leads
+2. Measure actual conversion rates in the dashboard
+3. Compare against broad-targeting campaigns
+4. Adjust strategy and re-score
+
+This cycle of **score → target → measure → iterate** is what drove the 2x conversion improvement — not any single model tweak.
+
+
+### Results
+
+| Metric | Value |
+|--------|-------|
+| Lead records analyzed | **2M+** |
+| Conversion rate improvement | **2x** |
+| Campaign targeting efficiency | Significantly improved — fewer leads contacted, higher conversions |
+
+
+### Challenges & Learnings
+
+- **Score staleness**: Lead behavior changes over time. Built a monthly retraining pipeline to keep scores fresh
+- **Stakeholder trust**: The marketing team initially didn't trust model scores over their gut feel. Showing side-by-side campaign results (scored vs unscored targeting) built credibility
+- **Data quality**: Inconsistent CRM entries and missing fields were the biggest bottleneck — spent significant effort on data cleaning and validation before modeling
     `,
   },
   {
@@ -1037,24 +1322,88 @@ This project was a deep dive into **scalable, observable backend design** using 
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Integrated scalable lakehouse for healthcare analytics on Azure cloud.
+### The Problem: Data Silos Were Killing Cross-Team Analytics
 
-### Tech Stack
-- **Azure Data Lake + Blob Storage**
-- **Databricks** for ETL processing
-- **Synapse Analytics** for querying
+Healthcare data at scale is messy. Clinical data, claims data, user engagement data, and operational data all lived in different systems with different schemas and different update cadences. Teams that needed cross-cutting insights — like correlating claim processing times with customer satisfaction — had to manually export, join, and analyze data in spreadsheets.
 
-### Features
-- Automated table partitioning
-- Metadata push to PowerBI
+The goal: build a **centralized data lake on Azure** that could ingest, clean, and serve multi-GB daily data flows to any team through a single, governed platform.
 
-### Limitations
-- Query tuning required manual profiling
 
-### Impact
-- Enabled 8GB+ ingestion/day
-- Supported cross-team analytics
+### Architecture: Three-Layer Lakehouse
+
+The data lake followed a classic **medallion architecture** with three layers:
+
+\`\`\`
+Data Sources (APIs, databases, files)
+        ↓
+   ┌─────────────┐
+   │  Raw Layer   │  ← Azure Blob Storage (Parquet format)
+   │  (Bronze)    │     Exact copy of source data, immutable
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │ Cleaned Layer│  ← Databricks (PySpark ETL jobs)
+   │  (Silver)    │     Deduped, validated, schema-enforced
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │ Aggregated   │  ← Databricks + Synapse Analytics
+   │  (Gold)      │     Business-ready metrics and dimensions
+   └──────┬──────┘
+          ↓
+    Consumers (Power BI, APIs, ML pipelines)
+\`\`\`
+
+
+### Layer Details
+
+#### Bronze (Raw)
+- Data ingested into **Azure Blob Storage** in **Parquet format** — columnar, compressed, and partition-friendly
+- Sources included database CDC streams, API pulls, and file drops
+- Every record retained as-is for auditability — no transformations at this stage
+
+#### Silver (Cleaned)
+- **Databricks notebooks** (PySpark) handled the heavy lifting:
+  - Schema validation and type enforcement
+  - Deduplication based on composite keys
+  - Null handling and outlier flagging
+  - Timestamp normalization across time zones
+- Output: clean, consistent tables partitioned by date
+
+#### Gold (Aggregated)
+- Business-level aggregations built on top of silver tables:
+  - Daily/weekly/monthly KPIs
+  - Dimensional tables for reporting (provider, region, product)
+  - Pre-computed metrics for Power BI dashboards
+- **Synapse Analytics** served as the query engine for ad-hoc analysis and dashboard backends
+
+
+### Ingestion Pipeline
+
+| Stage | Technology | Detail |
+|-------|-----------|--------|
+| Extraction | Azure Data Factory | Scheduled pulls from source databases and APIs |
+| Landing | Azure Blob Storage | Raw Parquet files partitioned by source and date |
+| Processing | Databricks (PySpark) | Bronze → Silver → Gold transformations |
+| Serving | Synapse Analytics | SQL-based querying for dashboards and reports |
+| Visualization | Power BI | Connected to Gold layer for real-time dashboards |
+
+
+### Scale & Performance
+
+| Metric | Value |
+|--------|-------|
+| Daily data ingestion | **8GB+** |
+| Processing framework | Databricks auto-scaling clusters |
+| Query engine | Synapse serverless SQL pools |
+| Consumers | Power BI, data science team, operations team |
+
+
+### Challenges
+
+- **Schema drift**: Source systems occasionally changed column names or types without warning. Built schema validation checks in the Bronze → Silver step that flagged and quarantined non-conforming records
+- **Partition strategy**: Choosing the right partition key (date vs source vs region) had a huge impact on query performance. Settled on date-based partitioning for time-series queries with secondary partitions by data source
+- **Cost management**: Databricks clusters and Synapse queries can get expensive fast. Implemented auto-scaling policies and query timeouts to keep costs predictable
     `,
   },
   {
@@ -1077,24 +1426,84 @@ Integrated scalable lakehouse for healthcare analytics on Azure cloud.
     workType: "Professional",
     // github: "https://github.com/sarita-joshi/fraud-detection",
     content: `
-### Overview
-Developed internal chatbot to assist finance team with vendor and policy workflows.
+### The Problem: Invoice Approvals Were a Black Hole
 
-### Tech Stack
-- **Power Automate** for flow creation
-- **Salesforce API** integration
-- **Python + PowerShell** scripts
+The finance team's invoice approval process was entirely manual — an invoice would arrive, get forwarded via email to the department head, then to the finance department, then back if something was wrong. There was no central tracker, no standardized format, and no way to know where an invoice was stuck in the pipeline.
 
-### Features
-- Invoice lookup and update automation
-- Audit compliance prompts
+Invoices got lost in inboxes. Approvals took days. The finance team spent more time chasing people than processing payments.
 
-### Limitations
-- Required frequent maintenance
-- Not built for mobile view
 
-### Impact
-- 90% tasks auto-handled via flow bots
+### What Got Built
+
+An **end-to-end invoice approval automation system** using Microsoft Power Automate, with SharePoint Lists as the central data store:
+
+\`\`\`
+Invoice Submitted (Form/Email)
+        ↓
+  SharePoint List Entry
+  (standardized format)
+        ↓
+  Department Head Approval
+  (Power Automate flow)
+        ↓
+  Finance Department Review
+  (Power Automate flow)
+        ↓
+  Approved / Rejected / Returned
+        ↓
+  Auto-notifications & Audit Log
+\`\`\`
+
+
+### Approval Flow Design
+
+The system supported **multiple approval workflows** depending on invoice type and amount:
+
+| Invoice Type | Flow |
+|-------------|------|
+| Standard (<threshold) | Dept Head → Finance → Auto-approve |
+| High-value (>threshold) | Dept Head → Finance Head → CFO → Finance |
+| Recurring vendors | Pre-approved template → Finance only |
+
+Each flow was built as a separate Power Automate cloud flow with conditional branching based on invoice metadata.
+
+
+### SharePoint as the Single Source of Truth
+
+The key design decision was using **SharePoint Lists** to standardize everything:
+
+- Every invoice entered the system in a **consistent format** — vendor name, amount, department, GL code, supporting documents
+- The finance team could view all invoices in one place, filter by status, and export for reporting
+- Approval status, timestamps, and approver comments were tracked on each list item
+- This solved the finance team's core pain: **"where is this invoice and who's holding it up?"**
+
+
+### Reminder & Follow-up Flows
+
+Approvals that sat idle for more than a configured period triggered **automated follow-ups**:
+
+- **24-hour reminder** — gentle nudge to the pending approver
+- **48-hour escalation** — CC the approver's manager
+- **Weekly digest** — summary of all pending approvals sent to department heads
+
+These flows alone eliminated most of the "chasing people" overhead the finance team dealt with.
+
+
+### Results
+
+| Metric | Value |
+|--------|-------|
+| Manual approval effort reduction | **40%** |
+| Tasks auto-handled via flows | **90%** |
+| Average approval turnaround | Reduced from days to hours |
+| Invoice tracking visibility | **100%** — every invoice traceable in SharePoint |
+
+
+### Challenges
+
+- **Power Automate limitations**: Complex branching logic was hard to maintain visually in Power Automate's designer. Kept flows modular (one flow per approval type) to manage complexity
+- **SharePoint list limits**: Large lists (5000+ items) hit view threshold limits. Implemented indexed columns and filtered views to keep performance acceptable
+- **User adoption**: Getting department heads to approve via the flow instead of replying to emails required training and gentle enforcement by the finance team
     `,
   },
 ];
