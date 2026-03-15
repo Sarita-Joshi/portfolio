@@ -84,10 +84,17 @@ const Projects = () => {
                     >
                       View Details <ArrowRight className="ml-1 w-4 h-4" />
                     </Link>
-                    <button className="flex items-center text-gray-400 hover:text-gray-300 font-medium transition-colors duration-200">
-                      <Github className="mr-1 w-4 h-4" />
-                      Code
-                    </button>
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center text-gray-400 hover:text-gray-300 font-medium transition-colors duration-200"
+                      >
+                        <Github className="mr-1 w-4 h-4" />
+                        Code
+                      </a>
+                    )}
                   </div>
                 </div>
               </motion.div>

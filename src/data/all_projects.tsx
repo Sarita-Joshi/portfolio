@@ -1,5 +1,3 @@
-import { workerData } from "worker_threads";
-
 export const allProjects = [
   {
     id: 1,
@@ -374,7 +372,7 @@ Working with OCTA’s projections helped us understand how **human-centered desi
     metrics: "100+ verified applicants, 95% data accuracy",
     category: ["Full-Stack"],
     workType: "Academic",
-    github: "https://github.com/Sarita-Joshi/Blockchain-Scholarship-Funing",
+    github: "https://github.com/Sarita-Joshi/FullStack-Scholarship-Funding-Smart-Contract",
     content: `
 ###  The Problem  
 Scholarships often operate behind closed doors — eligibility criteria are vague, fund allocation lacks visibility, and applicants have no clear way to track progress. I wanted to tackle this trust gap by **building transparency from the ground up**, using **blockchain and decentralized logic**.
@@ -550,8 +548,7 @@ Recreated Gmail’s smart compose experience by fine-tuning two language models 
     metrics: "94% classification accuracy, 3x faster sorting",
     category: ["AI / ML", "Full-Stack"],
     workType: "Hackathon",
-    github: "https://github.com/sarita-joshi/ecometer-waste-classifier",
-    demo: "https://ecometer-demo.com",
+    github: "https://github.com/Sarita-Joshi/recycli_ACMWHackathon",
     content: `
 ###  Problem: “Is This Recyclable?” Shouldn’t Be a Mystery  
 In 2019, even the most eco-conscious users couldn’t tell if an item belonged in recycling, compost, landfill, or e-waste — let alone understand its environmental impact. The information was out there… but not accessible in the moment.
