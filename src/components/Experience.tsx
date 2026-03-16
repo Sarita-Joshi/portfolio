@@ -102,14 +102,14 @@ const Experience = () => {
     location: "Long Beach, CA",
     period: "Jan 2025 – May 2025",
     description:
-      "Developing automation and AI validation tools for in-vehicle speech and NLP systems powering next-generation MBUX experiences.",
+      "Developed automation and AI validation tools for in-vehicle speech and NLP systems powering next-generation MBUX experiences.",
     achievements: [
       "Engineered a Python-based test automation platform integrating LLMs to validate dialog accuracy, reducing regression time by 85%. (4 min -> 30 sec)",
       "Automated QA for 250+ speech scenarios via multi-process pipelines, ECU communication, log analysis, and audio data processing to streamline testing workflows.",
       "Performed data aggregation and trend analysis on speech logs and accuracy metrics using Python and Pandas to generate BI reports for evaluation.",
       "Partnered with engineers to debug model and system interactions, improving test reliability and coverage by 48%.",
     ],
-    current: true,
+    current: false,
   },
   {
     title: "Software Engineer",
