@@ -1,5 +1,5 @@
 
-import { Briefcase, Trophy, ExternalLink, MapPin, Calendar } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { achievements } from '../data/achievements';
 const Awards = () => {
 

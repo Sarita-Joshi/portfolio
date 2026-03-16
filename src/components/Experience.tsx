@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Briefcase, MapPin, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
+import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from "framer-motion";
 
 const COLLAPSED_BULLETS = 3;
@@ -92,8 +92,6 @@ function ExperienceCard({ exp }: { exp: any }) {
 }
 
 const Experience = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   const experiences = [
   {
@@ -146,21 +144,8 @@ const Experience = () => {
   },
 ];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-
-
 return (
-  <section id="experience" ref={sectionRef} className="pt-10 px-4 sm:px-6 lg:px-8 bg-gray-900">
+  <section id="experience" className="pt-10 px-4 sm:px-6 lg:px-8 bg-gray-900">
     <div className="max-w-7xl mx-auto">
       
       {/* Section Heading */}
